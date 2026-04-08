@@ -1,65 +1,22 @@
-<!-- UnixBot - Header public (partial) -->
-<header class="site-header" id="siteHeader">
-  <div class="container">
-    <nav class="site-nav">
-      <!-- Logo -->
-      <a href="/" class="site-logo" aria-label="UnixBot - Accueil">
-        <img src="/favicons/logo.png" alt="UnixBot" class="site-logo__img" width="32" height="32" />
-        <span class="site-logo__text">UnixBot</span>
-      </a>
-
-      <!-- Desktop nav -->
-      <ul class="site-nav__links" id="navLinks">
-        <li><a href="/" class="site-nav__link<%= typeof currentPage !== 'undefined' && currentPage === 'home' ? ' active' : '' %>">Accueil</a></li>
-        <li><a href="/features" class="site-nav__link<%= typeof currentPage !== 'undefined' && currentPage === 'features' ? ' active' : '' %>">Fonctionnalités</a></li>
-        <li><a href="/commands" class="site-nav__link<%= typeof currentPage !== 'undefined' && currentPage === 'commands' ? ' active' : '' %>">Commandes</a></li>
-        <li><a href="/docs" class="site-nav__link<%= typeof currentPage !== 'undefined' && currentPage === 'docs' ? ' active' : '' %>">Documentation</a></li>
-        <li><a href="/contact" class="site-nav__link<%= typeof currentPage !== 'undefined' && currentPage === 'contact' ? ' active' : '' %>">Contact</a></li>
-      </ul>
-
-      <!-- Actions -->
-      <div class="site-nav__actions">
-        <% if (typeof user !== 'undefined' && user) { %>
-          <a href="/dashboard/user" class="btn btn-primary btn-sm">
-            <i data-lucide="layout-dashboard"></i>
-            <span>Dashboard</span>
-          </a>
-        <% } else { %>
-          <a href="/login" class="btn btn-ghost btn-sm site-nav__login">Se connecter</a>
-          <a href="/api/v1/auth/bot-invite" class="btn btn-primary btn-sm" onclick="if(typeof openOAuthPopup==='function'){openOAuthPopup(this.href);return false;}">
-            <i data-lucide="plus"></i>
-            <span>Ajouter le bot</span>
-          </a>
-        <% } %>
-
-        <!-- Hamburger mobile -->
-        <button class="site-nav__hamburger" id="navHamburger" aria-label="Menu" aria-expanded="false">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/assets/css/app.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="container topbar-content">
+    <a href="/" class="brand">UnixBot Dashboard</a>
+    <nav>
+      <% if (user) { %>
+        <a href="/dashboard">Dashboard</a>
+      <% } else { %>
+        <a href="/login">Connexion</a>
+      <% } %>
     </nav>
   </div>
-
-  <!-- Mobile menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <div class="mobile-menu__inner">
-      <ul class="mobile-menu__links">
-        <li><a href="/" class="mobile-menu__link">Accueil</a></li>
-        <li><a href="/features" class="mobile-menu__link">Fonctionnalités</a></li>
-        <li><a href="/commands" class="mobile-menu__link">Commandes</a></li>
-        <li><a href="/docs" class="mobile-menu__link">Documentation</a></li>
-        <li><a href="/contact" class="mobile-menu__link">Contact</a></li>
-      </ul>
-      <div class="mobile-menu__actions">
-        <% if (typeof user !== 'undefined' && user) { %>
-          <a href="/dashboard/user" class="btn btn-primary btn-lg btn-full">Dashboard</a>
-        <% } else { %>
-          <a href="/login" class="btn btn-secondary btn-lg btn-full">Se connecter</a>
-          <a href="/api/v1/auth/bot-invite" class="btn btn-primary btn-lg btn-full">Ajouter le bot</a>
-        <% } %>
-      </div>
-    </div>
-  </div>
 </header>
+<main class="container">
