@@ -1,0 +1,168 @@
+<%# About page - uses layouts/public.ejs %>
+
+<!-- Hero -->
+<section class="page-hero">
+  <div class="container">
+    <span class="section-tag" data-animate="fadeInUp">À propos</span>
+    <h1 class="page-hero__title" data-animate="fadeInUp">L'histoire derrière UnixBot</h1>
+    <p class="page-hero__desc" data-animate="fadeInUp">
+      Un projet open-source né de la passion pour Discord et le développement web.
+    </p>
+  </div>
+</section>
+
+<!-- Story -->
+<section class="about-section">
+  <div class="container">
+    <div class="about-grid" data-animate="fadeInUp">
+
+      <div class="about-card">
+        <div class="about-card__icon about-card__icon--purple">
+          <i data-lucide="heart"></i>
+        </div>
+        <h2 class="about-card__title">Pourquoi UnixBot ?</h2>
+        <p class="about-card__text">
+          UnixBot est né d'un constat simple : la plupart des bots Discord populaires
+          sont soit payants, soit surchargés de fonctionnalités inutiles, soit fermés
+          et opaques. L'objectif était de créer un bot <strong>gratuit</strong>,
+          <strong>transparent</strong> et <strong>efficace</strong> - un outil que
+          n'importe quelle communauté peut adopter en toute confiance.
+        </p>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card__icon about-card__icon--blue">
+          <i data-lucide="code-2"></i>
+        </div>
+        <h2 class="about-card__title">Open-source</h2>
+        <p class="about-card__text">
+          Le code source d'UnixBot est entièrement public. Chaque ligne peut être
+          auditée, chaque fonctionnalité peut être proposée ou améliorée par la
+          communauté. Pas de version premium cachée, pas de monétisation agressive
+          - juste un logiciel libre construit avec soin.
+        </p>
+      </div>
+
+      <div class="about-card">
+        <div class="about-card__icon about-card__icon--green">
+          <i data-lucide="layers"></i>
+        </div>
+        <h2 class="about-card__title">Architecture moderne</h2>
+        <p class="about-card__text">
+          Construit avec <strong>Node.js</strong>, <strong>Discord.js</strong>,
+          <strong>Express</strong> et <strong>SQLite</strong>, UnixBot repose sur
+          une architecture modulaire séparant le bot, l'API et le dashboard web.
+          Chaque composant peut évoluer indépendamment, garantissant stabilité
+          et maintenabilité.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Values -->
+<section class="about-values">
+  <div class="container">
+    <div class="section-header" data-animate="fadeInUp">
+      <span class="section-tag">Nos valeurs</span>
+      <h2 class="section-title">Ce qui guide le projet</h2>
+    </div>
+
+    <div class="values-grid" data-animate="fadeInUp">
+      <div class="value-item">
+        <i data-lucide="eye" class="value-item__icon"></i>
+        <h3 class="value-item__title">Transparence</h3>
+        <p class="value-item__desc">
+          Code ouvert, décisions publiques, pas de collecte de données cachée.
+          Vous savez exactement ce que fait le bot.
+        </p>
+      </div>
+
+      <div class="value-item">
+        <i data-lucide="zap" class="value-item__icon"></i>
+        <h3 class="value-item__title">Performance</h3>
+        <p class="value-item__desc">
+          Temps de réponse minimal, consommation de ressources optimisée.
+          Le bot réagit en millisecondes.
+        </p>
+      </div>
+
+      <div class="value-item">
+        <i data-lucide="shield-check" class="value-item__icon"></i>
+        <h3 class="value-item__title">Sécurité</h3>
+        <p class="value-item__desc">
+          Sessions chiffrées, permissions strictes, données minimales.
+          La sécurité est intégrée dès la conception.
+        </p>
+      </div>
+
+      <div class="value-item">
+        <i data-lucide="users" class="value-item__icon"></i>
+        <h3 class="value-item__title">Communauté</h3>
+        <p class="value-item__desc">
+          Construit pour les communautés, amélioré par les retours.
+          Chaque suggestion compte.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tech stack -->
+<section class="about-tech">
+  <div class="container">
+    <div class="section-header" data-animate="fadeInUp">
+      <span class="section-tag">Stack technique</span>
+      <h2 class="section-title">Technologies utilisées</h2>
+    </div>
+
+    <div class="tech-grid" data-animate="fadeInUp">
+      <div class="tech-item">
+        <div class="tech-item__name">Node.js</div>
+        <div class="tech-item__role">Runtime</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item__name">Discord.js</div>
+        <div class="tech-item__role">Client Discord</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item__name">Express</div>
+        <div class="tech-item__role">Serveur web</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item__name">SQLite</div>
+        <div class="tech-item__role">Base de données</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item__name">EJS</div>
+        <div class="tech-item__role">Templates</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item__name">Lucide</div>
+        <div class="tech-item__role">Icônes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="page-cta">
+  <div class="container page-cta__inner">
+    <h2 data-animate="fadeInUp">Envie de contribuer ?</h2>
+    <p data-animate="fadeInUp">
+      UnixBot est un projet ouvert. Rejoignez-nous sur GitHub ou Discord pour
+      proposer des idées, signaler des bugs ou contribuer au code.
+    </p>
+    <div class="page-cta__actions" data-animate="fadeInUp">
+      <a href="https://github.com/" class="btn btn-primary btn-xl" target="_blank" rel="noopener">
+        <i data-lucide="github"></i>
+        <span>GitHub</span>
+      </a>
+      <a href="https://discord.gg/" class="btn btn-outline btn-xl" target="_blank" rel="noopener">
+        <i data-lucide="message-circle"></i>
+        <span>Serveur Discord</span>
+      </a>
+    </div>
+  </div>
+</section>

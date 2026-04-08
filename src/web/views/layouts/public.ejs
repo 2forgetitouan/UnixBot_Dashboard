@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof title !== 'undefined' ? title : 'UnixBot - Bot Discord Multifonction' %></title>
+
+  <!-- SEO -->
+  <meta name="description" content="<%= typeof description !== 'undefined' ? description : 'UnixBot est un bot Discord open-source et modulaire : giveaways, modération, auto-bump, messages et dashboard web moderne.' %>" />
+  <meta name="theme-color" content="#7A3AED" />
+  <meta name="robots" content="index, follow" />
+  <% const _base = typeof baseUrl !== 'undefined' ? baseUrl : ''; const _canon = typeof canonical !== 'undefined' ? canonical : ''; const _absUrl = _base + _canon; const _ogImg = _base + '/favicons/og-banner.png'; %>
+  <link rel="canonical" href="<%= _absUrl %>" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="<%= typeof title !== 'undefined' ? title : 'UnixBot' %>" />
+  <meta property="og:description" content="<%= typeof description !== 'undefined' ? description : 'Bot Discord open-source avec dashboard web moderne.' %>" />
+  <meta property="og:image" content="<%= _ogImg %>" />
+  <meta property="og:url" content="<%= _absUrl %>" />
+  <meta property="og:site_name" content="UnixBot" />
+  <meta property="og:locale" content="fr_FR" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="<%= typeof title !== 'undefined' ? title : 'UnixBot' %>" />
+  <meta name="twitter:description" content="<%= typeof description !== 'undefined' ? description : 'Bot Discord open-source avec dashboard web moderne.' %>" />
+  <meta name="twitter:image" content="<%= _ogImg %>" />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/favicons/1dark.svg" />
+
+  <!-- Fonts (preconnect + link instead of CSS @import for performance) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;900&display=swap" />
+
+  <!-- CSS (ordre : design-system → components → layout → page-specific) -->
+  <link rel="stylesheet" href="/css/design-system.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/public.css" />
+  <% if (typeof extraCss !== 'undefined' && extraCss) { %>
+    <% extraCss.forEach(function(href) { %>
+      <link rel="stylesheet" href="<%= href %>" />
+    <% }); %>
+  <% } %>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js" defer></script>
+</head>
+<body class="<%= typeof bodyClass !== 'undefined' ? bodyClass : '' %>">
+
+  <%- include('../partials/header', { user: typeof user !== 'undefined' ? user : null, currentPage: typeof currentPage !== 'undefined' ? currentPage : '' }) %>
+
+  <!-- Page content (injected) -->
+  <main class="site-main" id="siteMain">
+    <%- body %>
+  </main>
+
+  <%- include('../partials/footer') %>
+  <%- include('../partials/cookie-banner') %>
+
+  <!-- Global scripts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+  </script>
+  <script src="/js/public.js" defer></script>
+  <script src="/js/spa-router.js" defer></script>
+  <% if (typeof extraJs !== 'undefined' && extraJs) { %>
+    <% extraJs.forEach(function(src) { %>
+      <script src="<%= src %>" defer></script>
+    <% }); %>
+  <% } %>
+</body>
+</html>
+</body>
+</html>

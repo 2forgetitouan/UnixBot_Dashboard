@@ -1,0 +1,349 @@
+/**
+ * Dashboard Skeleton Loaders
+ * Placeholder loading states — utilise .skeleton de design-system.css.
+ */
+
+/* ── Base skeleton shapes ──────────────────────── */
+.skeleton-text {
+  height: 0.875rem;
+  border-radius: var(--radius-sm);
+  width: 100%;
+}
+
+.skeleton-text.w-xs  { width: 25%; }
+.skeleton-text.w-sm  { width: 40%; }
+.skeleton-text.w-md  { width: 65%; }
+.skeleton-text.w-lg  { width: 85%; }
+.skeleton-text.w-full { width: 100%; }
+
+.skeleton-heading {
+  height: 1.5rem;
+  width: 50%;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.skeleton-avatar.lg {
+  width: 80px;
+  height: 80px;
+}
+
+.skeleton-avatar.sm {
+  width: 32px;
+  height: 32px;
+}
+
+.skeleton-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.skeleton-badge {
+  height: 1.25rem;
+  width: 4rem;
+  border-radius: var(--radius-full);
+}
+
+.skeleton-btn {
+  height: 36px;
+  width: 100px;
+  border-radius: var(--radius-md);
+}
+
+.skeleton-btn.w-full {
+  width: 100%;
+}
+
+.skeleton-btn.sm {
+  width: 88px;
+  height: 28px;
+}
+
+.skeleton-btn.xs {
+  width: 72px;
+  height: 28px;
+}
+
+.skeleton-text.h-xs {
+  height: 0.75rem;
+}
+
+.skeleton-row {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+}
+
+.skeleton-row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--sp-2);
+}
+
+/* ── Skeleton spacing helpers ── */
+.skeleton-mt-2 { margin-top: var(--sp-2); }
+.skeleton-mt-3 { margin-top: var(--sp-3); }
+.skeleton-mt-4 { margin-top: var(--sp-4); }
+.skeleton-mt-6 { margin-top: var(--sp-6); }
+
+.skeleton-input {
+  height: 36px;
+  border-radius: var(--radius-md);
+  width: 100%;
+}
+
+.skeleton-toggle {
+  height: 26px;
+  width: 48px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.skeleton-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+}
+
+/* ── Stat card skeleton ────────────────────────── */
+.skeleton-stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.skeleton-stat-card .skeleton-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+/* ── Guild card skeleton ───────────────────────── */
+.skeleton-guild-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+}
+
+.skeleton-guild-card .skeleton-guild-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+
+.skeleton-guild-card .skeleton-guild-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+}
+
+.skeleton-guild-card .skeleton-guild-actions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+/* ── Table skeleton ────────────────────────────── */
+.skeleton-table {
+  width: 100%;
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+}
+
+.skeleton-table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--sp-4);
+  padding: var(--sp-4);
+  background: var(--bg-tertiary);
+}
+
+.skeleton-table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--sp-4);
+  padding: var(--sp-4);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.skeleton-table-row:last-child {
+  border-bottom: none;
+}
+
+/* ── Form card skeleton ────────────────────────── */
+.skeleton-form-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.skeleton-form-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+/* ── Giveaway card skeleton ────────────────────── */
+.skeleton-giveaway-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+}
+
+.skeleton-giveaway-card .skeleton-gw-header {
+  padding: var(--sp-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.skeleton-giveaway-card .skeleton-gw-body {
+  padding: var(--sp-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.skeleton-giveaway-card .skeleton-gw-footer {
+  padding: var(--sp-4);
+  background: var(--bg-tertiary);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ── Command card skeleton ─────────────────────── */
+.skeleton-command-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.skeleton-command-card .skeleton-cmd-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ── Page-level skeleton grids ─────────────────── */
+.skeleton-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--sp-6);
+  margin-bottom: var(--sp-8);
+}
+
+.skeleton-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--sp-6);
+}
+
+.skeleton-commands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--sp-4);
+}
+
+/* ── User profile skeleton ─────────────────────── */
+.skeleton-profile {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-xl);
+  padding: var(--sp-8);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  margin-bottom: var(--sp-8);
+}
+
+.skeleton-profile-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.skeleton-profile-stats {
+  display: flex;
+  gap: var(--sp-8);
+  margin-top: var(--sp-2);
+}
+
+.skeleton-profile-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+/* ── Fade transition for skeleton → content ────── */
+.skeleton-container {
+  animation: fadeIn var(--duration-200) var(--ease-out);
+}
+
+.skeleton-container[data-loaded] {
+  animation: skeletonFadeOut var(--duration-200) var(--ease-out) forwards;
+}
+
+@keyframes skeletonFadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; height: 0; overflow: hidden; pointer-events: none; }
+}
+
+/* ── Responsive skeleton grids ─────────────────── */
+@media (max-width: 768px) {
+  .skeleton-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .skeleton-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skeleton-profile {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .skeleton-profile-stats {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .skeleton-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skeleton-commands-grid {
+    grid-template-columns: 1fr;
+  }
+}

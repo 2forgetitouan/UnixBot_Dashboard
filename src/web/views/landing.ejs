@@ -1,0 +1,415 @@
+<%# Landing page - uses layouts/public.ejs (header + footer included automatically) %>
+
+<!-- ========================================
+     HERO
+     ======================================== -->
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-glow hero-glow--primary"></div>
+    <div class="hero-glow hero-glow--secondary"></div>
+    <div class="hero-grid"></div>
+  </div>
+
+  <div class="container hero-inner">
+    <div class="hero-content" data-animate="fadeInUp">
+      <div class="hero-badge">
+        <i data-lucide="sparkles" class="hero-badge__icon"></i>
+        <span>Open-source &amp; gratuit</span>
+      </div>
+
+      <h1 class="hero-title">
+        Le bot Discord<br />
+        <span class="hero-title--accent">tout-en-un</span> pour votre serveur
+      </h1>
+
+      <p class="hero-subtitle">
+        Giveaways, modération, auto-bump, messagerie avancée et dashboard web -
+        UnixBot centralise tout ce dont vous avez besoin, simplement.
+      </p>
+
+      <div class="hero-actions">
+        <a
+          href="<%= botInviteUrl %>"
+          class="btn btn-primary btn-xl"
+          onclick="window.openOAuthPopup(this.href); return false;"
+        >
+          <i data-lucide="plus-circle"></i>
+          <span>Ajouter à Discord</span>
+        </a>
+
+        <a href="/commands" class="btn btn-outline btn-xl">
+          <i data-lucide="book-open"></i>
+          <span>Voir les commandes</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Live stats -->
+    <div class="hero-stats" data-animate="fadeInUp">
+      <div class="hero-stat">
+        <span class="hero-stat__value" id="statServers">-</span>
+        <span class="hero-stat__label">Serveurs actifs</span>
+      </div>
+      <div class="hero-stat-divider" aria-hidden="true"></div>
+      <div class="hero-stat">
+        <span class="hero-stat__value" id="statUsers">-</span>
+        <span class="hero-stat__label">Utilisateurs</span>
+      </div>
+      <div class="hero-stat-divider" aria-hidden="true"></div>
+      <div class="hero-stat">
+        <span class="hero-stat__value" id="statUptime">-</span>
+        <span class="hero-stat__label">Statut</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     SOCIAL PROOF
+     ======================================== -->
+<section class="social-proof">
+  <div class="container">
+    <p class="social-proof__text">
+      Déjà adopté par des communautés Discord de toutes tailles
+    </p>
+    <div class="social-proof__pills">
+      <div class="proof-pill">
+        <i data-lucide="shield-check"></i>
+        <span>Modération fiable</span>
+      </div>
+      <div class="proof-pill">
+        <i data-lucide="zap"></i>
+        <span>Réponse instantanée</span>
+      </div>
+      <div class="proof-pill">
+        <i data-lucide="lock"></i>
+        <span>Données sécurisées</span>
+      </div>
+      <div class="proof-pill">
+        <i data-lucide="refresh-cw"></i>
+        <span>Mises à jour fréquentes</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     FEATURES OVERVIEW
+     ======================================== -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="section-header" data-animate="fadeInUp">
+      <span class="section-tag">Fonctionnalités</span>
+      <h2 class="section-title">Tout ce qu'il faut, rien de superflu</h2>
+      <p class="section-desc">
+        UnixBot regroupe les outils essentiels pour faire vivre et protéger
+        votre communauté Discord.
+      </p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feat-card" data-animate="fadeInUp">
+        <div class="feat-card__icon feat-card__icon--purple">
+          <i data-lucide="gift"></i>
+        </div>
+        <h3 class="feat-card__title">Giveaways</h3>
+        <p class="feat-card__desc">
+          Créez, gérez et relancez des concours en quelques clics depuis le
+          dashboard ou par commande. Tirage au sort automatique, participants
+          vérifiés.
+        </p>
+      </div>
+
+      <div class="feat-card" data-animate="fadeInUp">
+        <div class="feat-card__icon feat-card__icon--blue">
+          <i data-lucide="shield"></i>
+        </div>
+        <h3 class="feat-card__title">Modération</h3>
+        <p class="feat-card__desc">
+          Purge de messages, gestion des rôles, logs détaillés. Gardez votre
+          serveur propre avec des outils pensés pour les modérateurs.
+        </p>
+      </div>
+
+      <div class="feat-card" data-animate="fadeInUp">
+        <div class="feat-card__icon feat-card__icon--green">
+          <i data-lucide="arrow-up-circle"></i>
+        </div>
+        <h3 class="feat-card__title">Auto-Bump</h3>
+        <p class="feat-card__desc">
+          Remontez automatiquement votre serveur sur les listes de serveurs.
+          Planification intelligente et statistiques de bumps intégrées.
+        </p>
+      </div>
+
+      <div class="feat-card" data-animate="fadeInUp">
+        <div class="feat-card__icon feat-card__icon--amber">
+          <i data-lucide="message-square"></i>
+        </div>
+        <h3 class="feat-card__title">Messages &amp; Embeds</h3>
+        <p class="feat-card__desc">
+          Envoyez des messages riches et des embeds dans n'importe quel salon
+          depuis le dashboard. Éditeur visuel intégré.
+        </p>
+      </div>
+
+      <div class="feat-card" data-animate="fadeInUp">
+        <div class="feat-card__icon feat-card__icon--red">
+          <i data-lucide="archive"></i>
+        </div>
+        <h3 class="feat-card__title">Anti-Archive</h3>
+        <p class="feat-card__desc">
+          Empêchez les forums et threads de s'archiver automatiquement.
+          Configuration par salon, gestion intelligente.
+        </p>
+      </div>
+
+      <div class="feat-card" data-animate="fadeInUp">
+        <div class="feat-card__icon feat-card__icon--teal">
+          <i data-lucide="layout-dashboard"></i>
+        </div>
+        <h3 class="feat-card__title">Dashboard Web</h3>
+        <p class="feat-card__desc">
+          Interface web moderne et complète pour configurer le bot, visualiser
+          les statistiques et gérer vos serveurs sans quitter le navigateur.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     FEATURE SHOWCASE - Alternating
+     ======================================== -->
+<section class="showcase-section">
+  <div class="container">
+
+    <!-- Showcase 1: Dashboard -->
+    <div class="showcase" data-animate="fadeInUp">
+      <div class="showcase__visual">
+        <div class="showcase-mockup">
+          <div class="mockup-bar">
+            <span class="mockup-dot mockup-dot--red"></span>
+            <span class="mockup-dot mockup-dot--yellow"></span>
+            <span class="mockup-dot mockup-dot--green"></span>
+            <span class="mockup-url">unixbot.live/dashboard</span>
+          </div>
+          <div class="mockup-body">
+            <div class="mockup-sidebar">
+              <div class="mockup-nav-item active"></div>
+              <div class="mockup-nav-item"></div>
+              <div class="mockup-nav-item"></div>
+              <div class="mockup-nav-item"></div>
+            </div>
+            <div class="mockup-content">
+              <div class="mockup-card-row">
+                <div class="mockup-stat-card">
+                  <div class="mockup-stat-icon"></div>
+                  <div class="mockup-stat-text">
+                    <div class="mockup-line mockup-line--short"></div>
+                    <div class="mockup-line mockup-line--number"></div>
+                  </div>
+                </div>
+                <div class="mockup-stat-card">
+                  <div class="mockup-stat-icon"></div>
+                  <div class="mockup-stat-text">
+                    <div class="mockup-line mockup-line--short"></div>
+                    <div class="mockup-line mockup-line--number"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="mockup-chart"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase__text">
+        <span class="section-tag">Dashboard intuitif</span>
+        <h3 class="showcase__title">Contrôlez tout depuis votre navigateur</h3>
+        <p class="showcase__desc">
+          Accédez au dashboard web sécurisé pour configurer le bot, lancer des
+          giveaways, envoyer des messages et consulter les statistiques de vos
+          serveurs. Connexion via Discord OAuth2, zéro friction.
+        </p>
+        <ul class="showcase__list">
+          <li><i data-lucide="check-circle-2"></i> Connexion sécurisée via Discord</li>
+          <li><i data-lucide="check-circle-2"></i> Gestion multi-serveurs</li>
+          <li><i data-lucide="check-circle-2"></i> Interface responsive (mobile &amp; desktop)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Showcase 2: Giveaways -->
+    <div class="showcase showcase--reverse" data-animate="fadeInUp">
+      <div class="showcase__visual">
+        <div class="showcase-embed">
+          <div class="embed-sidebar-accent"></div>
+          <div class="embed-body">
+            <div class="embed-author">
+              <img src="/favicons/1dark.svg" alt="UnixBot" class="embed-avatar" width="24" height="24" />
+              <span>UnixBot</span>
+            </div>
+            <div class="embed-title">🎉 Giveaway - Nitro Discord</div>
+            <div class="embed-fields">
+              <div class="embed-field">
+                <div class="embed-field-name">Fin dans</div>
+                <div class="embed-field-value embed-countdown">2j 14h 32m</div>
+              </div>
+              <div class="embed-field">
+                <div class="embed-field-name">Participants</div>
+                <div class="embed-field-value">47</div>
+              </div>
+            </div>
+            <div class="embed-footer">
+              <span>🎉 Participer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase__text">
+        <span class="section-tag">Giveaways</span>
+        <h3 class="showcase__title">Des concours en toute simplicité</h3>
+        <p class="showcase__desc">
+          Lancez un giveaway en quelques secondes : durée, prix, nombre de
+          gagnants. Le bot gère tout, du tirage au sort au reroll, depuis le
+          dashboard ou les commandes slash.
+        </p>
+        <ul class="showcase__list">
+          <li><i data-lucide="check-circle-2"></i> Tirage automatique &amp; reroll</li>
+          <li><i data-lucide="check-circle-2"></i> Gestion depuis le dashboard</li>
+          <li><i data-lucide="check-circle-2"></i> Historique &amp; statistiques</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ========================================
+     NUMBERS / STATS BANNER
+     ======================================== -->
+<section class="stats-banner">
+  <div class="container">
+    <div class="stats-banner__grid">
+      <div class="stats-banner__item" data-animate="fadeInUp">
+        <span class="stats-banner__value">100%</span>
+        <span class="stats-banner__label">Gratuit &amp; open-source</span>
+      </div>
+      <div class="stats-banner__item" data-animate="fadeInUp">
+        <span class="stats-banner__value" id="statBannerServers">-</span>
+        <span class="stats-banner__label">Serveurs</span>
+      </div>
+      <div class="stats-banner__item" data-animate="fadeInUp">
+        <span class="stats-banner__value">24/7</span>
+        <span class="stats-banner__label">Disponibilité</span>
+      </div>
+      <div class="stats-banner__item" data-animate="fadeInUp">
+        <span class="stats-banner__value">&lt; 100ms</span>
+        <span class="stats-banner__label">Latence moyenne</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     FAQ TEASER
+     ======================================== -->
+<section class="faq-teaser" id="faq">
+  <div class="container">
+    <div class="section-header" data-animate="fadeInUp">
+      <span class="section-tag">FAQ</span>
+      <h2 class="section-title">Questions fréquentes</h2>
+    </div>
+
+    <div class="faq-grid" data-animate="fadeInUp">
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span>Comment ajouter UnixBot à mon serveur ?</span>
+          <i data-lucide="chevron-down" class="faq-item__chevron"></i>
+        </summary>
+        <div class="faq-item__a">
+          <p>
+            Cliquez sur le bouton « Ajouter à Discord » en haut de cette page,
+            sélectionnez votre serveur et autorisez les permissions requises.
+            Le bot sera opérationnel en quelques secondes.
+          </p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span>UnixBot est-il vraiment gratuit ?</span>
+          <i data-lucide="chevron-down" class="faq-item__chevron"></i>
+        </summary>
+        <div class="faq-item__a">
+          <p>
+            Oui, toutes les fonctionnalités sont gratuites et le code source est
+            disponible publiquement. Pas de version premium, pas de
+            fonctionnalités cachées derrière un paywall.
+          </p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span>Mes données sont-elles en sécurité ?</span>
+          <i data-lucide="chevron-down" class="faq-item__chevron"></i>
+        </summary>
+        <div class="faq-item__a">
+          <p>
+            UnixBot ne collecte que les données strictement nécessaires à son
+            fonctionnement (identifiants Discord publics). Les sessions sont
+            chiffrées et les données sont stockées de manière sécurisée.
+            Consultez notre <a href="/privacy">politique de confidentialité</a>.
+          </p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__q">
+          <span>Comment accéder au dashboard ?</span>
+          <i data-lucide="chevron-down" class="faq-item__chevron"></i>
+        </summary>
+        <div class="faq-item__a">
+          <p>
+            Connectez-vous via Discord en cliquant sur « Se connecter » dans
+            le menu. Vous serez redirigé vers le dashboard où vous pourrez
+            gérer vos serveurs.
+          </p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
+     FINAL CTA
+     ======================================== -->
+<section class="final-cta">
+  <div class="container final-cta__inner">
+    <div class="final-cta__glow" aria-hidden="true"></div>
+    <h2 class="final-cta__title" data-animate="fadeInUp">
+      Prêt à améliorer votre serveur ?
+    </h2>
+    <p class="final-cta__desc" data-animate="fadeInUp">
+      Rejoignez les communautés qui font déjà confiance à UnixBot.
+      Installation en 30 secondes, aucune configuration requise.
+    </p>
+    <div class="final-cta__actions" data-animate="fadeInUp">
+      <a
+        href="<%= botInviteUrl %>"
+        class="btn btn-primary btn-xl"
+        onclick="window.openOAuthPopup(this.href); return false;"
+      >
+        <i data-lucide="rocket"></i>
+        <span>Ajouter UnixBot</span>
+      </a>
+      <a href="/docs" class="btn btn-ghost btn-xl">
+        <i data-lucide="file-text"></i>
+        <span>Documentation</span>
+      </a>
+    </div>
+  </div>
+</section>

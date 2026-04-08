@@ -1,0 +1,151 @@
+<%# Commands Page - uses layouts/public.ejs %>
+
+<section class="page-hero">
+  <div class="container">
+    <span class="section-tag"><i data-lucide="terminal" style="width:14px;height:14px"></i> Référence</span>
+    <h1 class="page-hero__title">Commandes</h1>
+    <p class="page-hero__desc">
+      Toutes les commandes slash d'UnixBot, organisées par catégorie avec exemples d'utilisation.
+    </p>
+  </div>
+</section>
+
+<!-- Stats summary -->
+<%
+  const totalCommands = Object.values(commandsByCategory).reduce((s, c) => s + c.length, 0);
+  const totalCategories = Object.keys(commandsByCategory).length;
+  const adminCount = Object.values(commandsByCategory).reduce((s, c) => s + c.filter(cmd => cmd.admin).length, 0);
+%>
+<section class="cmd-stats">
+  <div class="container">
+    <div class="cmd-stats__grid">
+      <div class="cmd-stats__item">
+        <span class="cmd-stats__value"><%= totalCommands %></span>
+        <span class="cmd-stats__label">Commandes</span>
+      </div>
+      <div class="cmd-stats__item">
+        <span class="cmd-stats__value"><%= totalCategories %></span>
+        <span class="cmd-stats__label">Catégories</span>
+      </div>
+      <div class="cmd-stats__item">
+        <span class="cmd-stats__value"><%= adminCount %></span>
+        <span class="cmd-stats__label">Admin</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Filter bar -->
+<section class="cmd-filter">
+  <div class="container">
+    <div class="cmd-filter__bar">
+      <div class="cmd-filter__search">
+        <i data-lucide="search" class="cmd-filter__icon"></i>
+        <input
+          type="text"
+          id="cmd-search"
+          class="cmd-filter__input"
+          placeholder="Rechercher une commande…"
+          autocomplete="off"
+        />
+      </div>
+      <div class="cmd-filter__tags" role="tablist">
+        <button class="cmd-tag cmd-tag--active" data-category="all" role="tab" aria-selected="true">
+          Toutes
+        </button>
+        <%
+          const categoryMeta = {
+            admin:      { icon: 'shield',   label: 'Admin' },
+            evenements: { icon: 'calendar', label: 'Événements' },
+            fun:        { icon: 'smile',    label: 'Fun' },
+            infos:      { icon: 'info',     label: 'Infos' },
+            utils:      { icon: 'wrench',   label: 'Utilitaires' },
+          };
+        %>
+        <% Object.keys(commandsByCategory).forEach(cat => {
+          const meta = categoryMeta[cat] || { icon: 'folder', label: cat.charAt(0).toUpperCase() + cat.slice(1) };
+        %>
+          <button class="cmd-tag" data-category="<%= cat %>" role="tab" aria-selected="false">
+            <i data-lucide="<%= meta.icon %>" style="width:14px;height:14px"></i>
+            <%= meta.label %>
+          </button>
+        <% }); %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Commands grid -->
+<section class="cmd-list">
+  <div class="container">
+    <div class="cmd-grid" id="cmd-grid">
+      <% Object.keys(commandsByCategory).forEach(category => { %>
+        <% commandsByCategory[category].forEach(command => { %>
+          <article class="cmd-card" data-category="<%= category %>" data-name="<%= command.name %>">
+            <div class="cmd-card__head">
+              <div class="cmd-card__title-row">
+                <span class="cmd-card__slash">/</span>
+                <h3 class="cmd-card__name"><%= command.name %></h3>
+              </div>
+              <% if (command.admin) { %>
+                <span class="cmd-badge cmd-badge--admin">
+                  <i data-lucide="shield" style="width:12px;height:12px"></i> Admin
+                </span>
+              <% } %>
+            </div>
+
+            <p class="cmd-card__desc"><%= command.description %></p>
+
+            <% if (command.usage) { %>
+              <div class="cmd-card__usage">
+                <code><%= command.usage %></code>
+              </div>
+            <% } %>
+
+            <% if (command.examples && command.examples.length > 0) { %>
+              <div class="cmd-card__examples">
+                <span class="cmd-card__examples-label">Exemples</span>
+                <% command.examples.forEach(example => { %>
+                  <div class="cmd-card__example"><code><%= example %></code></div>
+                <% }); %>
+              </div>
+            <% } %>
+
+            <% if (command.detailsHtml) { %>
+              <details class="cmd-card__details">
+                <summary>
+                  <i data-lucide="chevron-right" style="width:14px;height:14px"></i>
+                  Plus de détails
+                </summary>
+                <div class="cmd-card__details-body"><%- command.detailsHtml %></div>
+              </details>
+            <% } %>
+          </article>
+        <% }); %>
+      <% }); %>
+    </div>
+
+    <!-- Empty state -->
+    <div class="cmd-empty" id="cmd-empty" hidden>
+      <i data-lucide="search-x" style="width:48px;height:48px;color:var(--text-muted)"></i>
+      <p>Aucune commande ne correspond à votre recherche.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="page-cta">
+  <div class="container">
+    <h2 class="page-cta__title">Prêt à utiliser ces commandes ?</h2>
+    <p class="page-cta__desc">Ajoutez UnixBot à votre serveur Discord en un clic.</p>
+    <div class="page-cta__actions">
+      <a href="https://discord.com/oauth2/authorize?client_id=BOT_ID&permissions=8&scope=bot%20applications.commands"
+         class="btn btn--primary btn--lg" target="_blank" rel="noopener">
+        <i data-lucide="plus-circle"></i> Ajouter à Discord
+      </a>
+      <a href="/docs" class="btn btn--outline btn--lg">
+        <i data-lucide="book-open"></i> Documentation
+      </a>
+    </div>
+  </div>
+</section>

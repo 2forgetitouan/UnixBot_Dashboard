@@ -1,0 +1,154 @@
+<%# Contact page - uses layouts/public.ejs %>
+
+<!-- Hero -->
+<section class="page-hero">
+  <div class="container">
+    <span class="section-tag" data-animate="fadeInUp">Contact</span>
+    <h1 class="page-hero__title" data-animate="fadeInUp">Parlons-en</h1>
+    <p class="page-hero__desc" data-animate="fadeInUp">
+      Une question, un bug, une suggestion ? Plusieurs moyens de nous joindre.
+    </p>
+  </div>
+</section>
+
+<!-- Contact options -->
+<section class="contact-section">
+  <div class="container">
+    <div class="contact-grid" data-animate="fadeInUp">
+
+      <!-- Discord -->
+      <a href="https://discord.gg/" class="contact-card" target="_blank" rel="noopener">
+        <div class="contact-card__icon contact-card__icon--discord">
+          <svg width="28" height="28" viewBox="0 -28.5 256 256" fill="currentColor">
+            <path d="M216.856339,16.5966031 C200.285002,8.84328665 182.566144,3.20849988 164.041564,0 C161.766523,4.11318106 159.108624,9.64549908 157.276099,14.0464379 C137.583995,11.0849896 118.072967,11.0849896 98.7430163,14.0464379 C96.9108417,9.64549908 94.1925838,4.11318106 91.8971895,0 C73.3526068,3.2084988 55.6133949,8.86399117 39.0420583,16.6376612 C5.61752293,67.146514 -3.4433191,116.400813 1.08711069,164.955721 C23.2560196,181.510915 44.7403634,191.567697 65.8621325,198.148576 C71.0772151,190.971126 75.7283628,183.341335 79.7352139,175.300261 C72.104019,172.400575 64.7949724,168.822202 57.8887866,164.667963 C59.7209612,163.310589 61.5131304,161.891452 63.2445898,160.431257 C105.36741,180.133187 151.134928,180.133187 192.754523,160.431257 C194.506336,161.891452 196.298154,163.310589 198.110326,164.667963 C191.183787,168.842556 183.854737,172.420929 176.223542,175.320965 C180.230393,183.341335 184.861538,190.991831 190.096624,198.16893 C211.238746,191.588051 232.743023,181.531619 254.911949,164.955721 C260.227747,108.668201 245.831087,59.8662432 216.856339,16.5966031 Z M85.4738752,135.09489 C72.8290281,135.09489 62.4592217,123.290155 62.4592217,108.914901 C62.4592217,94.5396472 72.607595,82.7145587 85.4738752,82.7145587 C98.3405064,82.7145587 108.709962,94.5189427 108.488529,108.914901 C108.508531,123.290155 98.3405064,135.09489 85.4738752,135.09489 Z M170.525237,135.09489 C157.88039,135.09489 147.510584,123.290155 147.510584,108.914901 C147.510584,94.5396472 157.658606,82.7145587 170.525237,82.7145587 C183.391518,82.7145587 193.761324,94.5189427 193.539891,108.914901 C193.539891,123.290155 183.391518,135.09489 170.525237,135.09489 Z"/>
+          </svg>
+        </div>
+        <h2 class="contact-card__title">Serveur Discord</h2>
+        <p class="contact-card__desc">
+          Rejoignez notre serveur de support pour obtenir de l'aide en temps réel,
+          signaler des bugs ou simplement discuter avec la communauté.
+        </p>
+        <span class="contact-card__link">
+          Rejoindre le serveur
+          <i data-lucide="arrow-right"></i>
+        </span>
+      </a>
+
+      <!-- GitHub -->
+      <a href="https://github.com/" class="contact-card" target="_blank" rel="noopener">
+        <div class="contact-card__icon contact-card__icon--github">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+          </svg>
+        </div>
+        <h2 class="contact-card__title">GitHub</h2>
+        <p class="contact-card__desc">
+          Ouvrez une issue pour signaler un bug ou proposer une fonctionnalité.
+          Les pull requests sont les bienvenues.
+        </p>
+        <span class="contact-card__link">
+          Ouvrir une issue
+          <i data-lucide="arrow-right"></i>
+        </span>
+      </a>
+
+      <!-- Email -->
+      <a href="mailto:contact@unixbot.live" class="contact-card">
+        <div class="contact-card__icon contact-card__icon--email">
+          <i data-lucide="mail"></i>
+        </div>
+        <h2 class="contact-card__title">Email</h2>
+        <p class="contact-card__desc">
+          Pour les demandes formelles, partenariats ou questions relatives au RGPD
+          et à la protection des données.
+        </p>
+        <span class="contact-card__link">
+          contact@unixbot.live
+          <i data-lucide="arrow-right"></i>
+        </span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- Contact form -->
+<section class="contact-form-section">
+  <div class="container">
+    <div class="section-header" data-animate="fadeInUp">
+      <span class="section-tag">Message</span>
+      <h2 class="section-title">Envoyez-nous un message</h2>
+      <p class="section-desc">
+        Remplissez le formulaire ci-dessous et nous vous répondrons dans les
+        meilleurs délais.
+      </p>
+    </div>
+
+    <form class="contact-form" data-animate="fadeInUp" id="contactForm" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="contactName">Nom / Pseudo</label>
+          <input
+            type="text"
+            class="form-input"
+            id="contactName"
+            name="name"
+            placeholder="Votre nom ou pseudo Discord"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactEmail">Email</label>
+          <input
+            type="email"
+            class="form-input"
+            id="contactEmail"
+            name="email"
+            placeholder="votre@email.com"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="contactSubject">Sujet</label>
+        <select class="form-select" id="contactSubject" name="subject" required>
+          <option value="" disabled selected>Choisissez un sujet</option>
+          <option value="bug">Signaler un bug</option>
+          <option value="feature">Proposer une fonctionnalité</option>
+          <option value="support">Demande de support</option>
+          <option value="data">Demande RGPD / données personnelles</option>
+          <option value="partnership">Partenariat</option>
+          <option value="other">Autre</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="contactMessage">Message</label>
+        <textarea
+          class="form-textarea"
+          id="contactMessage"
+          name="message"
+          rows="6"
+          placeholder="Décrivez votre demande en détail…"
+          required
+        ></textarea>
+      </div>
+
+      <div class="contact-form__footer">
+        <p class="contact-form__notice">
+          <i data-lucide="info"></i>
+          En envoyant ce formulaire, vous acceptez que nous utilisions votre email
+          uniquement pour vous répondre. Voir notre
+          <a href="/legal/privacy">politique de confidentialité</a>.
+        </p>
+        <button type="submit" class="btn btn-primary btn-lg">
+          <i data-lucide="send"></i>
+          <span>Envoyer</span>
+        </button>
+      </div>
+
+      <div class="contact-form__status" id="contactStatus" hidden></div>
+    </form>
+  </div>
+</section>

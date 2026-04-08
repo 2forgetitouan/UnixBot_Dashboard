@@ -1,0 +1,333 @@
+<form id="settingsForm" data-guild-id="<%= guild.id %>">
+
+  <!-- Paramètres généraux -->
+  <details class="settings-section" open>
+    <summary class="settings-section-header">
+      <div class="settings-section-title">
+        <i data-lucide="settings"></i>
+        <span>Paramètres généraux</span>
+      </div>
+      <i data-lucide="chevron-down" class="settings-section-chevron"></i>
+    </summary>
+    <div class="settings-section-body">
+      <div class="form-grid">
+        <div class="form-card">
+          <div class="form-group">
+            <label for="settingPrefix">Préfixe des commandes</label>
+            <input
+              type="text"
+              id="settingPrefix"
+              name="prefix"
+              class="form-input"
+              value="<%= settings.prefix || '!' %>"
+              maxlength="5"
+            >
+            <small>Variables: Ex: <code id="prefixPreview"><%= settings.prefix || '!' %>help</code></small>
+          </div>
+
+          <div class="form-group">
+            <label for="settingLanguage">Langue du bot</label>
+            <select id="settingLanguage" name="language" class="form-select">
+              <option value="fr" <%= settings.language === 'fr' ? 'selected' : '' %>>Français</option>
+              <option value="en" <%= settings.language === 'en' ? 'selected' : '' %>>English</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="settingTimezone">Fuseau horaire</label>
+            <select id="settingTimezone" name="timezone" class="form-select">
+              <option value="Europe/Paris" <%= settings.timezone === 'Europe/Paris' ? 'selected' : '' %>>Europe/Paris (UTC+1)</option>
+              <option value="Europe/London" <%= settings.timezone === 'Europe/London' ? 'selected' : '' %>>Europe/London (UTC)</option>
+              <option value="America/New_York" <%= settings.timezone === 'America/New_York' ? 'selected' : '' %>>America/New_York (UTC-5)</option>
+              <option value="America/Los_Angeles" <%= settings.timezone === 'America/Los_Angeles' ? 'selected' : '' %>>America/Los_Angeles (UTC-8)</option>
+              <option value="Asia/Tokyo" <%= settings.timezone === 'Asia/Tokyo' ? 'selected' : '' %>>Asia/Tokyo (UTC+9)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- Notifications -->
+  <details class="settings-section" open>
+    <summary class="settings-section-header">
+      <div class="settings-section-title">
+        <i data-lucide="bell"></i>
+        <span>Notifications</span>
+      </div>
+      <i data-lucide="chevron-down" class="settings-section-chevron"></i>
+    </summary>
+    <div class="settings-section-body">
+      <div class="form-grid">
+        <div class="form-card">
+          <h3>
+            <i data-lucide="hand"></i>
+            <span>Bienvenue</span>
+          </h3>
+
+          <div class="form-group">
+            <label class="toggle-label">
+              <input type="checkbox" name="welcome_enabled" <%= settings.welcome_enabled ? 'checked' : '' %>>
+              <span class="toggle-slider"></span>
+              <span>Messages de bienvenue</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label for="settingWelcomeChannel">Salon de bienvenue</label>
+            <select id="settingWelcomeChannel" name="welcome_channel_id" class="form-select">
+              <option value="">Sélectionner un salon</option>
+              <% (channels || []).filter(c => c.type === 0).forEach(c => { %>
+                <option value="<%= c.id %>" <%= settings.welcome_channel_id === c.id ? 'selected' : '' %>>#<%= c.name %></option>
+              <% }); %>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="settingWelcomeMessage">Message de bienvenue</label>
+            <textarea
+              id="settingWelcomeMessage"
+              name="welcome_message"
+              class="form-textarea"
+              placeholder="Bienvenue {user} sur {server} !"
+              rows="3"
+            ><%= settings.welcome_message || '' %></textarea>
+            <small>Variables: {user}, {server}, {memberCount}</small>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3>
+            <i data-lucide="log-out"></i>
+            <span>Au revoir</span>
+          </h3>
+
+          <div class="form-group">
+            <label class="toggle-label">
+              <input type="checkbox" name="goodbye_enabled" <%= settings.goodbye_enabled ? 'checked' : '' %>>
+              <span class="toggle-slider"></span>
+              <span>Messages d'au revoir</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- Logs et modération -->
+  <details class="settings-section" open>
+    <summary class="settings-section-header">
+      <div class="settings-section-title">
+        <i data-lucide="file-text"></i>
+        <span>Logs et modération</span>
+      </div>
+      <i data-lucide="chevron-down" class="settings-section-chevron"></i>
+    </summary>
+    <div class="settings-section-body">
+      <div class="form-grid">
+        <div class="form-card">
+          <h3>
+            <i data-lucide="scroll-text"></i>
+            <span>Logs</span>
+          </h3>
+
+          <div class="form-group">
+            <label class="toggle-label">
+              <input type="checkbox" name="logs_enabled" <%= settings.logs_enabled ? 'checked' : '' %>>
+              <span class="toggle-slider"></span>
+              <span>Activer les logs</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label for="settingLogsChannel">Salon de logs</label>
+            <select id="settingLogsChannel" name="logs_channel_id" class="form-select">
+              <option value="">Sélectionner un salon</option>
+              <% (channels || []).filter(c => c.type === 0).forEach(c => { %>
+                <option value="<%= c.id %>" <%= settings.logs_channel_id === c.id ? 'selected' : '' %>>#<%= c.name %></option>
+              <% }); %>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Types de logs</label>
+            <div class="log-types-list">
+              <label class="toggle-label toggle-label-sm">
+                <input type="checkbox" name="log_messages" <%= settings.log_messages !== false ? 'checked' : '' %>>
+                <span class="toggle-slider"></span>
+                <span>Messages supprimés/modifiés</span>
+              </label>
+              <label class="toggle-label toggle-label-sm">
+                <input type="checkbox" name="log_members" <%= settings.log_members !== false ? 'checked' : '' %>>
+                <span class="toggle-slider"></span>
+                <span>Arrivées/départs</span>
+              </label>
+              <label class="toggle-label toggle-label-sm">
+                <input type="checkbox" name="log_moderation" <%= settings.log_moderation !== false ? 'checked' : '' %>>
+                <span class="toggle-slider"></span>
+                <span>Actions de modération</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3>
+            <i data-lucide="shield"></i>
+            <span>Modération automatique</span>
+          </h3>
+
+          <div class="form-group">
+            <label class="toggle-label">
+              <input type="checkbox" name="automod_enabled" <%= settings.automod_enabled ? 'checked' : '' %>>
+              <span class="toggle-slider"></span>
+              <span>Modération automatique</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label class="toggle-label">
+              <input type="checkbox" name="antilink_enabled" <%= settings.antilink_enabled ? 'checked' : '' %>>
+              <span class="toggle-slider"></span>
+              <span>Anti-liens</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label class="toggle-label">
+              <input type="checkbox" name="antispam_enabled" <%= settings.antispam_enabled ? 'checked' : '' %>>
+              <span class="toggle-slider"></span>
+              <span>Anti-spam</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label for="settingMuteRole">Rôle mute</label>
+            <select id="settingMuteRole" name="mute_role_id" class="form-select">
+              <option value="">Sélectionner un rôle</option>
+              <% (roles || []).forEach(r => { %>
+                <option value="<%= r.id %>" <%= settings.mute_role_id === r.id ? 'selected' : '' %>><%= r.name %></option>
+              <% }); %>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- Giveaways et fonctionnalités -->
+  <details class="settings-section" open>
+    <summary class="settings-section-header">
+      <div class="settings-section-title">
+        <i data-lucide="gift"></i>
+        <span>Giveaways et fonctionnalités</span>
+      </div>
+      <i data-lucide="chevron-down" class="settings-section-chevron"></i>
+    </summary>
+    <div class="settings-section-body">
+      <div class="form-grid">
+        <div class="form-card">
+          <h3>
+            <i data-lucide="gift"></i>
+            <span>Giveaways</span>
+          </h3>
+
+          <div class="form-group">
+            <label for="settingGiveawayColor">Couleur des embeds</label>
+            <div class="color-picker-row">
+              <input
+                type="color"
+                id="settingGiveawayColor"
+                name="giveaway_color"
+                class="form-color"
+                value="<%= settings.giveaway_color || '#5865F2' %>"
+              >
+              <input
+                type="text"
+                class="form-input form-input-color-hex"
+                id="giveawayColorText"
+                value="<%= settings.giveaway_color || '#5865F2' %>"
+                readonly
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="settingGiveawayEmoji">Emoji de participation</label>
+            <input
+              type="text"
+              id="settingGiveawayEmoji"
+              name="giveaway_emoji"
+              class="form-input"
+              value="<%= settings.giveaway_emoji || '🎉' %>"
+              maxlength="10"
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="toggle-label">
+              <input type="checkbox" name="giveaway_dm_winners" <%= settings.giveaway_dm_winners !== false ? 'checked' : '' %>>
+              <span class="toggle-slider"></span>
+              <span>Notifier les gagnants en MP</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3>
+            <i data-lucide="zap"></i>
+            <span>Fonctionnalités</span>
+          </h3>
+
+          <div class="form-group">
+            <label class="toggle-label">
+              <input type="checkbox" name="selfbump_enabled" <%= settings.selfbump_enabled ? 'checked' : '' %>>
+              <span class="toggle-slider"></span>
+              <span>Rappels de bump automatiques</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label class="toggle-label">
+              <input type="checkbox" name="autounarchive_enabled" <%= settings.autounarchive_enabled ? 'checked' : '' %>>
+              <span class="toggle-slider"></span>
+              <span>Auto-désarchivage des threads</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label class="toggle-label">
+              <input type="checkbox" name="ping_tracking" <%= settings.ping_tracking !== false ? 'checked' : '' %>>
+              <span class="toggle-slider"></span>
+              <span>Suivi des performances (ping)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- Le bouton de sauvegarde est géré par la barre flottante UnsavedChanges -->
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Color picker sync
+  var colorInput = document.getElementById('settingGiveawayColor');
+  var colorText = document.getElementById('giveawayColorText');
+  if (colorInput && colorText) {
+    colorInput.addEventListener('input', function() {
+      colorText.value = colorInput.value;
+    });
+  }
+
+  // Prefix live preview
+  var prefixInput = document.getElementById('settingPrefix');
+  var prefixPreview = document.getElementById('prefixPreview');
+  if (prefixInput && prefixPreview) {
+    prefixInput.addEventListener('input', function() {
+      prefixPreview.textContent = (prefixInput.value || '!') + 'help';
+    });
+  }
+});
+</script>

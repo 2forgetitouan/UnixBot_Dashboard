@@ -1,0 +1,42 @@
+<%# Error Page - uses layouts/public.ejs %>
+
+<%
+  const statusCode = (typeof error !== 'undefined' && error && error.status) ? error.status : 500;
+  const isDev = typeof process !== 'undefined' && process.env && process.env.NODE_ENV !== 'production';
+%>
+
+<section class="err-hero">
+  <div class="container">
+    <div class="err-card">
+      <div class="err-card__code"><%= statusCode %></div>
+      <h1 class="err-card__title"><%- title || 'Une erreur est survenue' %></h1>
+
+      <% if (typeof message !== 'undefined' && message) { %>
+        <p class="err-card__desc"><%- message %></p>
+      <% } else { %>
+        <p class="err-card__desc">
+          Une erreur technique est survenue. Veuillez réessayer ultérieurement.
+        </p>
+      <% } %>
+
+      <div class="err-card__actions">
+        <a href="/" class="btn btn--primary btn--lg">
+          <i data-lucide="home"></i> Accueil
+        </a>
+        <a href="javascript:history.back()" class="btn btn--outline btn--lg">
+          <i data-lucide="arrow-left"></i> Précédent
+        </a>
+      </div>
+
+      <% if (isDev && typeof error !== 'undefined' && error && error.stack) { %>
+        <details class="err-card__stack">
+          <summary>
+            <i data-lucide="code" style="width:14px;height:14px"></i>
+            Stack trace (dev)
+          </summary>
+          <pre><%= error.stack %></pre>
+        </details>
+      <% } %>
+    </div>
+  </div>
+</section>

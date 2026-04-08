@@ -1,0 +1,9 @@
+{
+  "name": "ping",
+  "description": "Affiche la latence du bot",
+  "usage": "/ping",
+  "examples": [
+    "/ping"
+  ],
+  "details": "Affiche la latence WebSocket et le temps de réponse du bot. Utile pour vérifier la connexion."
+}

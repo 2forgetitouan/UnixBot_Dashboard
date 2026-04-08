@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title><%= typeof title !== 'undefined' ? title : 'Dashboard - UnixBot' %></title>
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/favicons/1dark.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/design-system.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+  <% if (typeof extraCss !== 'undefined' && Array.isArray(extraCss)) { %>
+    <% extraCss.forEach(function(href) { %>
+  <link rel="stylesheet" href="<%= href %>" />
+    <% }); %>
+  <% } %>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js" defer></script>
+</head>
+<body<%= (typeof currentPage !== 'undefined' && currentPage) ? ' data-page="' + currentPage + '"' : '' %><%= (typeof guild !== 'undefined' && guild && guild.id) ? ' data-guild-id="' + guild.id + '"' : '' %>>
+
+  <%- include('../partials/sidebar', {
+    user: typeof user !== 'undefined' ? user : {},
+    guild: typeof guild !== 'undefined' ? guild : null,
+    currentPage: typeof currentPage !== 'undefined' ? currentPage : '',
+    guilds: typeof guilds !== 'undefined' ? guilds : undefined
+  }) %>
+
+  <main class="main-content">
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <header class="main-header">
+      <div class="header-left">
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+          <i data-lucide="menu"></i>
+        </button>
+        <div class="header-titles">
+          <% if (typeof guild !== 'undefined' && guild) { %>
+          <nav class="breadcrumbs" aria-label="Fil d'Ariane">
+            <a href="/dashboard/user" class="breadcrumb-item">Serveurs</a>
+            <span class="breadcrumb-sep"><i data-lucide="chevron-right"></i></span>
+            <% if (typeof currentPage !== 'undefined' && currentPage !== 'overview') { %>
+            <a href="/dashboard/guild/<%= guild.id %>" class="breadcrumb-item"><%= guild.name %></a>
+            <span class="breadcrumb-sep"><i data-lucide="chevron-right"></i></span>
+            <span class="breadcrumb-item current"><%= typeof pageTitle !== 'undefined' ? pageTitle : currentPage %></span>
+            <% } else { %>
+            <span class="breadcrumb-item current"><%= guild.name %></span>
+            <% } %>
+          </nav>
+          <div class="guild-header">
+            <% if (guild.iconUrl) { %>
+            <img src="<%= guild.iconUrl %>" alt="<%= guild.name %>" class="guild-icon" width="40" height="40" />
+            <% } else { %>
+            <div class="guild-icon-placeholder"><%= guild.name.charAt(0) %></div>
+            <% } %>
+            <div class="guild-info">
+              <h1><%= typeof pageTitle !== 'undefined' ? pageTitle : guild.name %></h1>
+              <% if (typeof pageSubtitle !== 'undefined' && pageSubtitle) { %>
+              <span class="guild-members"><%= pageSubtitle %></span>
+              <% } %>
+            </div>
+          </div>
+          <% } else { %>
+          <nav class="breadcrumbs" aria-label="Fil d'Ariane">
+            <a href="/dashboard/user" class="breadcrumb-item">Dashboard</a>
+            <span class="breadcrumb-sep"><i data-lucide="chevron-right"></i></span>
+            <span class="breadcrumb-item current"><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Accueil' %></span>
+          </nav>
+          <h1><%= typeof pageTitle !== 'undefined' ? pageTitle : (typeof title !== 'undefined' ? title : 'Dashboard') %></h1>
+          <% } %>
+        </div>
+      </div>
+      <div class="header-right">
+        <%- typeof headerRight !== 'undefined' && headerRight ? headerRight : '' %>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <%- body %>
+    </div>
+  </main>
+
+  <!-- Toast notifications -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Page data (safe JSON injection) -->
+  <% if (typeof pageData !== 'undefined' && pageData) { %>
+  <script type="application/json" id="pageData"><%- JSON.stringify(pageData).replace(/<\//g, '<\\/') %></script>
+  <% } %>
+  <script src="/js/dashboard.js" defer></script>
+  <% if (typeof extraJs !== 'undefined' && Array.isArray(extraJs)) { %>
+    <% extraJs.forEach(function(src) { %>
+  <script src="<%= src %>" defer></script>
+    <% }); %>
+  <% } %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

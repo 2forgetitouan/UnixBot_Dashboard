@@ -1,0 +1,247 @@
+<!-- Tabs -->
+<div class="tabs" role="tablist" aria-label="Sections messages">
+  <button class="tab active" data-tab="send" role="tab" aria-selected="true" aria-controls="tab-send">
+    <i data-lucide="send"></i>
+    <span>Envoyer</span>
+  </button>
+  <button class="tab" data-tab="history" role="tab" aria-selected="false" aria-controls="tab-history">
+    <i data-lucide="history"></i>
+    <span>Historique</span>
+  </button>
+</div>
+
+<!-- Send Message Tab -->
+<div class="tab-content active" id="sendTab">
+  <div class="message-composer">
+    <div class="composer-header">
+      <h2>Composer un message</h2>
+      <p>Envoyez un message dans un salon ou en DM via le bot</p>
+    </div>
+
+    <form id="sendMessageForm">
+      <!-- Message Type Selection -->
+      <div class="form-group">
+        <label>Type de message</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" name="messageType" value="channel" checked>
+            <span class="radio-custom"></span>
+            <span>Message dans un salon</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="messageType" value="dm">
+            <span class="radio-custom"></span>
+            <span>Message privé (DM)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Channel Selection -->
+      <div class="form-group" id="channelGroup">
+        <label for="channelId">Salon</label>
+        <select id="channelId" name="channelId" class="form-select">
+          <option value="">Sélectionner un salon</option>
+          <% channels.forEach(channel => { %>
+          <option value="<%= channel.id %>">#<%= channel.name %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <!-- User Selection for DM -->
+      <div class="form-group hidden" id="userGroup">
+        <label for="targetUserId">Utilisateur</label>
+        <div class="user-search-container">
+          <input type="text" id="userSearch" class="form-input" placeholder="Rechercher un utilisateur...">
+          <input type="hidden" id="targetUserId" name="targetUserId">
+          <div class="user-search-results" id="userSearchResults"></div>
+        </div>
+      </div>
+
+      <!-- Message Type: Simple or Embed -->
+      <div class="form-group">
+        <label>Format</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" name="format" value="simple" checked>
+            <span class="radio-custom"></span>
+            <span>Message simple</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="format" value="embed">
+            <span class="radio-custom"></span>
+            <span>Embed</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Simple Message Content -->
+      <div class="form-group" id="simpleContent">
+        <label for="content">Contenu du message</label>
+        <textarea id="content" name="content" class="form-textarea"
+          placeholder="Tapez votre message ici..." rows="5" maxlength="2000"></textarea>
+        <small class="char-count"><span id="contentCount">0</span>/2000</small>
+      </div>
+
+      <!-- Embed Builder -->
+      <div class="embed-builder hidden" id="embedBuilder">
+        <div class="form-group">
+          <label for="embedTitle">Titre</label>
+          <input type="text" id="embedTitle" class="form-input" maxlength="256">
+        </div>
+
+        <div class="form-group">
+          <label for="embedDescription">Description</label>
+          <textarea id="embedDescription" class="form-textarea" rows="4" maxlength="4096"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="embedColor">Couleur</label>
+            <input type="color" id="embedColor" class="form-color" value="#5865F2">
+          </div>
+          <div class="form-group">
+            <label for="embedThumbnail">Thumbnail (URL)</label>
+            <input type="url" id="embedThumbnail" class="form-input" placeholder="https://...">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="embedImage">Image (URL)</label>
+          <input type="url" id="embedImage" class="form-input" placeholder="https://...">
+        </div>
+
+        <div class="form-group">
+          <label for="embedFooter">Footer</label>
+          <input type="text" id="embedFooter" class="form-input" maxlength="2048">
+        </div>
+
+        <div class="form-group">
+          <label class="toggle-label">
+            <input type="checkbox" id="embedTimestamp">
+            <span class="toggle-slider"></span>
+            <span>Ajouter un timestamp</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Preview -->
+      <div class="message-preview">
+        <h3>Aperçu</h3>
+        <div class="preview-container discord-preview">
+          <div class="preview-message">
+            <div class="preview-avatar-wrapper">
+              <img src="/favicons/logo.png" alt="UnixBot" class="preview-avatar-img" id="botAvatarPreview">
+            </div>
+            <div class="preview-message-content">
+              <div class="preview-bot-header">
+                <span class="preview-name">UnixBot</span>
+                <span class="preview-badge">BOT</span>
+                <span class="preview-timestamp">Aujourd'hui à <%= new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) %></span>
+              </div>
+              <div class="preview-content" id="previewContent">
+                <span class="preview-placeholder">Votre message apparaîtra ici...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          <i data-lucide="send"></i>
+          <span>Envoyer le message</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- History Tab -->
+<div class="tab-content" id="historyTab">
+  <div class="history-container">
+    <div class="history-header">
+      <h2>Historique des messages</h2>
+      <button id="clearHistoryBtn" class="btn btn-danger btn-sm hidden">
+        <i data-lucide="trash-2"></i>
+        <span>Vider l'historique</span>
+      </button>
+    </div>
+
+    <!-- Skeleton loading state -->
+    <div id="historyLoading">
+      <div class="skeleton-table">
+        <div class="skeleton-table-header">
+          <div class="skeleton-text w-xs skeleton"></div>
+          <div class="skeleton-text w-sm skeleton"></div>
+          <div class="skeleton-text w-md skeleton"></div>
+          <div class="skeleton-text w-xs skeleton"></div>
+        </div>
+        <% for (let i = 0; i < 4; i++) { %>
+        <div class="skeleton-table-row">
+          <div class="skeleton-badge skeleton"></div>
+          <div class="skeleton-text w-sm skeleton"></div>
+          <div class="skeleton-text w-lg skeleton"></div>
+          <div class="skeleton-text w-xs skeleton"></div>
+        </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state hidden" id="historyEmpty">
+      <div class="empty-state-illustration">
+        <svg width="120" height="100" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="15" y="10" width="75" height="45" rx="8" fill="var(--bg-tertiary)" stroke="var(--border-color)" stroke-width="2"/>
+          <polygon points="35,55 45,55 30,68" fill="var(--bg-tertiary)" stroke="var(--border-color)" stroke-width="2" stroke-linejoin="round"/>
+          <line x1="30" y1="55" x2="50" y2="55" stroke="var(--bg-tertiary)" stroke-width="3"/>
+          <rect x="28" y="24" width="40" height="5" rx="2.5" fill="var(--border-color)" opacity="0.5"/>
+          <rect x="28" y="33" width="28" height="5" rx="2.5" fill="var(--border-color)" opacity="0.35"/>
+          <rect x="55" y="40" width="65" height="38" rx="8" fill="var(--bg-secondary)" stroke="var(--primary)" stroke-width="1.5" opacity="0.5"/>
+          <rect x="65" y="52" width="35" height="4" rx="2" fill="var(--primary)" opacity="0.2"/>
+          <rect x="65" y="60" width="25" height="4" rx="2" fill="var(--primary)" opacity="0.15"/>
+        </svg>
+      </div>
+      <h3>Aucun message</h3>
+      <p>Vous n'avez pas encore envoyé de message depuis le dashboard</p>
+    </div>
+
+    <!-- History table -->
+    <div class="data-table-wrapper hidden" id="historyTableWrapper">
+      <table class="data-table data-table-cards" id="historyTable">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Destination</th>
+            <th>Contenu</th>
+            <th>Statut</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Clear History Modal -->
+<div class="modal" id="confirmClearModal" role="dialog" aria-modal="true" aria-labelledby="confirmClearTitle">
+  <div class="modal-backdrop" data-modal-close></div>
+  <div class="modal-content modal-sm">
+    <div class="modal-header">
+      <h2 id="confirmClearTitle">Vider l'historique</h2>
+      <button class="modal-close" data-modal-close>
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-message">Tous les messages envoyés depuis le dashboard seront supprimés de l'historique. Cette action est irréversible.</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-modal-close>Annuler</button>
+      <button type="button" class="btn btn-danger" id="confirmClearBtn">
+        <i data-lucide="trash-2"></i>
+        <span>Vider l'historique</span>
+      </button>
+    </div>
+  </div>
+</div>

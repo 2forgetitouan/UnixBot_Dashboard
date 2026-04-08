@@ -1,0 +1,84 @@
+<%# Bot Offline Page - uses layouts/public.ejs + error.css %>
+
+<section class="err-hero">
+  <div class="err-404-wrap">
+
+    <!-- Numéro d'erreur (style identique au 404, cutout effect) -->
+    <div class="err-404-stage">
+      <div class="err-404-number" aria-hidden="true">503</div>
+      <h1 class="err-404-label">Hors ligne</h1>
+    </div>
+
+    <!-- Description -->
+    <p class="err-404-desc">
+      UnixBot n'est pas connecté à Discord pour le moment.<br>
+      Le dashboard nécessite que le bot soit en ligne.
+    </p>
+
+    <!-- Actions -->
+    <div class="err-offline-actions">
+      <button type="button" id="offlineRetryBtn" class="btn btn-primary btn-lg err-404-btn">
+        <i data-lucide="refresh-cw"></i> Réessayer
+      </button>
+      <a href="/" class="btn btn-outline btn-lg err-404-btn">
+        <i data-lucide="home"></i> Accueil
+      </a>
+    </div>
+
+    <!-- Countdown auto-retry -->
+    <p class="err-offline-countdown">
+      Nouvelle tentative dans <strong id="offlineCountdown">30</strong>s…
+    </p>
+
+  </div>
+</section>
+
+<style>
+.err-offline-actions {
+  display: flex;
+  gap: var(--sp-3);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-6);
+}
+
+.err-offline-countdown {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  .err-offline-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  .err-offline-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+</style>
+
+<script>
+(function () {
+  var count = 30;
+  var countEl = document.getElementById('offlineCountdown');
+  var retryBtn = document.getElementById('offlineRetryBtn');
+
+  if (retryBtn) {
+    retryBtn.addEventListener('click', function () {
+      window.location.reload();
+    });
+  }
+
+  var interval = setInterval(function () {
+    count--;
+    if (countEl) countEl.textContent = count;
+    if (count <= 0) {
+      clearInterval(interval);
+      window.location.reload();
+    }
+  }, 1000);
+}());
+</script>

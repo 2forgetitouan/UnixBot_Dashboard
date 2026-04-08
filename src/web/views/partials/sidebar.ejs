@@ -1,0 +1,162 @@
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a href="/" class="logo">
+      <img src="/favicons/logo.png" alt="UnixBot" class="logo-img" width="32" height="32" />
+      <span class="logo-text">UnixBot</span>
+    </a>
+    <button
+      class="sidebar-toggle"
+      id="sidebarToggle"
+      aria-label="Fermer le menu"
+    >
+      <i data-lucide="x"></i>
+    </button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <% if (typeof guild !== 'undefined' && guild) { %>
+    <!-- Guild info mini card -->
+    <div class="guild-mini-card">
+      <% if (guild.iconUrl) { %>
+      <img
+        src="<%= guild.iconUrl %>"
+        alt="<%= guild.name %>"
+        class="guild-mini-icon"
+        width="32"
+        height="32"
+      />
+      <% } else { %>
+      <div class="guild-mini-placeholder"><%= guild.name.charAt(0) %></div>
+      <% } %>
+      <span class="guild-mini-name"><%= guild.name %></span>
+    </div>
+
+    <!-- Navigation serveur -->
+    <div class="nav-section">
+      <div class="nav-section-title">Serveur</div>
+      <a
+        href="/dashboard/guild/<%= guild.id %>"
+        class="nav-item <%= currentPage === 'overview' ? 'active' : '' %>"
+      >
+        <i data-lucide="layout-dashboard"></i>
+        <span>Vue d'ensemble</span>
+        <span class="sidebar-tooltip">Vue d'ensemble</span>
+      </a>
+      <a
+        href="/dashboard/guild/<%= guild.id %>/commands"
+        class="nav-item <%= currentPage === 'commands' ? 'active' : '' %>"
+      >
+        <i data-lucide="terminal"></i>
+        <span>Commandes</span>
+        <span class="sidebar-tooltip">Commandes</span>
+      </a>
+      <a
+        href="/dashboard/guild/<%= guild.id %>/giveaways"
+        class="nav-item <%= currentPage === 'giveaways' ? 'active' : '' %>"
+      >
+        <i data-lucide="gift"></i>
+        <span>Giveaways</span>
+        <span class="sidebar-tooltip">Giveaways</span>
+      </a>
+      <a
+        href="/dashboard/guild/<%= guild.id %>/messages"
+        class="nav-item <%= currentPage === 'messages' ? 'active' : '' %>"
+      >
+        <i data-lucide="message-square"></i>
+        <span>Messages</span>
+        <span class="sidebar-tooltip">Messages</span>
+      </a>
+      <a
+        href="/dashboard/guild/<%= guild.id %>/autobump"
+        class="nav-item <%= currentPage === 'autobump' ? 'active' : '' %>"
+      >
+        <i data-lucide="zap"></i>
+        <span>Auto-Bump</span>
+        <span class="sidebar-tooltip">Auto-Bump</span>
+      </a>
+      <a
+        href="/dashboard/guild/<%= guild.id %>/settings"
+        class="nav-item <%= currentPage === 'settings' ? 'active' : '' %>"
+      >
+        <i data-lucide="settings"></i>
+        <span>Paramètres</span>
+        <span class="sidebar-tooltip">Paramètres</span>
+      </a>
+    </div>
+
+    <div class="nav-divider"></div>
+    <% } %>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Navigation</div>
+      <a href="/" class="nav-item">
+        <i data-lucide="home"></i>
+        <span>Accueil</span>
+        <span class="sidebar-tooltip">Accueil</span>
+      </a>
+      <a
+        href="/dashboard/user"
+        class="nav-item <%= currentPage === 'user' ? 'active' : '' %>"
+      >
+        <i data-lucide="server"></i>
+        <span>Mes serveurs</span>
+        <span class="sidebar-tooltip">Mes serveurs</span>
+      </a>
+    </div>
+
+    <% if (typeof guilds !== 'undefined' && guilds && guilds.length > 0) { %>
+    <div class="nav-divider"></div>
+
+    <!-- Liste des serveurs avec le bot -->
+    <div class="nav-section servers-list">
+      <div class="nav-section-title">Serveurs gérés</div>
+      <% const managedGuilds = guilds.filter(g => g.botPresent).slice(0, 5); if
+      (managedGuilds.length > 0) { managedGuilds.forEach(g => { %>
+      <a href="/dashboard/guild/<%= g.id %>" class="nav-item server-nav-item">
+        <% if (g.iconUrl) { %>
+        <img src="<%= g.iconUrl %>" alt="<%= g.name %>" class="server-nav-icon" width="24" height="24" loading="lazy" decoding="async" />
+        <% } else { %>
+        <div class="server-nav-placeholder"><%= g.name.charAt(0) %></div>
+        <% } %>
+        <span class="server-nav-name"><%= g.name %></span>
+      </a>
+      <% }); } else { %>
+      <div class="nav-empty">
+        <span>Aucun serveur avec le bot</span>
+      </div>
+      <% } %>
+    </div>
+    <% } %>
+  </nav>
+
+  <!-- Collapse toggle (desktop only) -->
+  <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" aria-label="Réduire la sidebar">
+    <i data-lucide="panel-left-close"></i>
+    <span class="collapse-label">Réduire</span>
+  </button>
+
+  <!-- User section avec support avatar decoration -->
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="avatar-wrapper">
+        <img src="<%= user.avatarUrl %>" alt="<%= user.username %>" class="user-avatar" width="36" height="36" loading="lazy" decoding="async" />
+        <% if (user.avatarDecoration) { %>
+        <img
+          src="https://cdn.discordapp.com/avatar-decoration-presets/<%= user.avatarDecoration %>.png?passthrough=true"
+          alt=""
+          class="avatar-decoration<%= user.avatarDecoration.startsWith('a_') ? ' animated' : '' %>"
+        />
+        <% } %>
+      </div>
+      <div class="user-info">
+        <span class="user-name"><%= user.username %></span>
+        <% if (user.isSuperuser) { %>
+        <span class="user-badge">Superuser</span>
+        <% } %>
+      </div>
+    </div>
+    <a href="/api/v1/auth/logout" class="logout-btn" title="Déconnexion">
+      <i data-lucide="log-out"></i>
+    </a>
+  </div>
+</aside>

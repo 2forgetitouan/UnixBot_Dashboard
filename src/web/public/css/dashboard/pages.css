@@ -1,0 +1,1572 @@
+/**
+ * Dashboard Pages
+ * Styles spécifiques aux pages : user profile, guilds, giveaways,
+ * commands, messages/Discord preview, role selector, participants.
+ */
+
+/* ============================================
+   USER PROFILE
+   ============================================ */
+.user-profile-card {
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(122, 58, 237, 0.04) 100%);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-xl);
+  padding: var(--sp-6);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  margin-bottom: var(--sp-6);
+  transition: border-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.user-profile-card:hover {
+  border-color: var(--card-border-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+
+.profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.profile-avatar-decoration {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+}
+
+.profile-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.profile-info h2 {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  margin: 0;
+}
+
+.profile-info .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.profile-info .badge i {
+  width: 14px;
+  height: 14px;
+}
+
+/* ── User Stats Grid ── */
+.user-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-8);
+}
+
+.user-stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  padding: var(--sp-5);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  transition: all var(--transition-fast);
+}
+
+.user-stat-card:hover {
+  border-color: var(--card-border-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+.user-stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-lg);
+  background: var(--stat-icon-bg);
+  color: var(--stat-icon-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.user-stat-icon i {
+  width: 22px;
+  height: 22px;
+}
+
+.user-stat-card.accent .user-stat-icon {
+  background: linear-gradient(135deg, var(--brand-500), var(--brand-600));
+  color: white;
+  box-shadow: var(--stat-icon-glow);
+}
+
+.user-stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-stat-value {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.user-stat-label {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+/* ── Guilds Toolbar (search + filters) ── */
+.guilds-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+  flex-wrap: wrap;
+}
+
+.guilds-search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+  max-width: 340px;
+}
+
+.guilds-search-icon {
+  position: absolute;
+  left: var(--sp-3);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.guilds-search-input {
+  width: 100%;
+  padding: var(--sp-2) var(--sp-4) var(--sp-2) var(--sp-9);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.guilds-search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.guilds-search-input:hover {
+  border-color: var(--input-border-hover);
+}
+
+.guilds-search-input:focus {
+  outline: none;
+  border-color: var(--input-border-focus);
+  box-shadow: var(--input-focus-ring);
+}
+
+.guilds-filter-group {
+  display: flex;
+  gap: var(--sp-1);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  border: 1px solid var(--border-color);
+}
+
+.guilds-filter-btn {
+  padding: var(--sp-1) var(--sp-3);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.guilds-filter-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.guilds-filter-btn.active {
+  color: white;
+  background: var(--primary);
+  box-shadow: var(--shadow-xs);
+}
+
+/* ============================================
+   GUILDS GRID
+   ============================================ */
+.guilds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--sp-4);
+}
+
+.guild-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  padding: var(--sp-5);
+  transition: all var(--transition-fast);
+  will-change: transform;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.guild-card:hover {
+  border-color: var(--card-border-hover);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.guild-card-inactive {
+  opacity: 0.65;
+}
+
+.guild-card-inactive:hover {
+  opacity: 0.85;
+}
+
+.guild-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.guild-card .guild-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-lg);
+}
+
+.guild-icon-placeholder {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: var(--text-lg);
+  flex-shrink: 0;
+}
+
+.guild-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.guild-card-info h3 {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.guild-card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.guild-card-meta .badge {
+  font-size: 10px;
+  padding: 1px 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.guild-card-meta .badge i {
+  width: 10px;
+  height: 10px;
+}
+
+.guild-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.guild-stat i {
+  width: 12px;
+  height: 12px;
+}
+
+.guild-stat-muted {
+  color: var(--text-muted);
+}
+
+.guild-card-status {
+  margin-bottom: var(--sp-4);
+}
+
+.guild-card-actions {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: auto;
+}
+
+.guild-card-actions .btn {
+  flex: 1;
+}
+
+/* ── Status badges ── */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.status-badge .status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-badge.status-online {
+  color: var(--success);
+  background: var(--success-bg);
+}
+
+.status-badge.status-online .status-dot {
+  background: var(--success);
+}
+
+.status-badge.status-offline {
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+}
+
+.status-badge.status-offline .status-dot {
+  background: var(--text-muted);
+}
+
+/* ── Empty-state full width ── */
+.empty-state-card.full-width {
+  grid-column: 1 / -1;
+}
+
+/* ============================================
+   GIVEAWAY CARDS
+   ============================================ */
+.giveaways-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--sp-6);
+}
+
+.giveaway-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  transition: all var(--transition-fast);
+  will-change: transform;
+}
+
+.giveaway-card:hover {
+  border-color: var(--card-border-hover);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.giveaway-card-header {
+  padding: var(--sp-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.giveaway-status {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
+.giveaway-status .status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.giveaway-status.active {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.giveaway-status.ended {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+}
+
+.giveaway-status.paused {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.giveaway-actions {
+  display: flex;
+  gap: var(--sp-1);
+}
+
+.giveaway-actions .btn-icon {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.giveaway-actions .btn-icon:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border-light);
+}
+
+.giveaway-actions .btn-icon:not(.btn-danger):hover {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.giveaway-card-body {
+  padding: var(--sp-6);
+}
+
+.giveaway-prize {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-2);
+}
+
+.giveaway-description {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-style: italic;
+  margin-top: var(--sp-1);
+  line-height: 1.4;
+}
+
+.winner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-1) var(--sp-2);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+}
+
+.winner-badge i {
+  width: 14px;
+  height: 14px;
+  color: var(--success);
+}
+
+.giveaway-card-footer {
+  padding: var(--sp-4);
+  background: var(--bg-tertiary);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.giveaway-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.giveaway-stat {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.giveaway-stat i {
+  width: 14px;
+  height: 14px;
+}
+
+.giveaway-timing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  align-items: flex-end;
+  text-align: right;
+}
+
+.giveaway-time {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.giveaway-time i {
+  width: 14px;
+  height: 14px;
+}
+
+.giveaway-enddate {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.giveaway-info {
+  display: flex;
+  gap: var(--sp-4);
+}
+
+.giveaway-info span {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.giveaway-info i {
+  width: 14px;
+  height: 14px;
+}
+
+.giveaway-time-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  align-items: flex-end;
+}
+
+.giveaway-date {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.giveaway-date i {
+  width: 12px;
+  height: 12px;
+}
+
+/* ── Ended card dimming ── */
+.giveaway-card.ended {
+  opacity: 0.75;
+}
+
+.giveaway-card.ended:hover {
+  opacity: 1;
+}
+
+/* ── Remove animation ── */
+.giveaway-card-removing {
+  opacity: 0.4;
+  pointer-events: none;
+  transform: scale(0.96);
+  transition: all var(--transition-base);
+}
+
+/* ── Winners section (in card body) ── */
+.giveaway-winners-section {
+  margin-top: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--success-bg);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--success);
+}
+
+.winners-label {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--success);
+  margin-bottom: var(--sp-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.winners-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+}
+
+/* ── Confirm modal ── */
+.confirm-message {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+/* ── Modal loading state ── */
+.modal-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-8);
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+/* ── Empty state icon wrapper ── */
+.empty-state-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-xl);
+  background: var(--primary-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--sp-4);
+}
+
+.empty-state-icon i {
+  width: 32px;
+  height: 32px;
+  color: var(--primary);
+}
+
+.empty-state-icon.danger {
+  background: var(--danger-bg, rgba(239, 68, 68, 0.1));
+}
+
+.empty-state-icon.danger i {
+  color: var(--danger, #ef4444);
+}
+
+/* ============================================
+   COMMANDS PAGE
+   ============================================ */
+
+/* ── Stats bar ── */
+.commands-stats {
+  display: flex;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-6);
+  flex-wrap: wrap;
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.stat-pill i {
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+}
+
+.stat-pill span {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stat-pill.stat-success i { color: var(--success); }
+.stat-pill.stat-success span { color: var(--success); }
+.stat-pill.stat-danger i { color: var(--danger); }
+.stat-pill.stat-danger span { color: var(--danger); }
+
+/* ── Category filter ── */
+.category-filter {
+  display: flex;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-6);
+  flex-wrap: wrap;
+}
+
+.category-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.category-btn i {
+  width: 14px;
+  height: 14px;
+}
+
+.category-btn:hover {
+  border-color: var(--border-light);
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.category-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.category-btn.active i {
+  color: white;
+}
+
+.category-count {
+  font-size: 0.625rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.15);
+  color: inherit;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  line-height: 1.4;
+}
+
+.category-btn:not(.active) .category-count {
+  background: var(--bg-hover);
+  color: var(--text-muted);
+}
+
+/* ── Bulk actions bar ── */
+.bulk-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  margin-bottom: var(--sp-4);
+}
+
+.bulk-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.bulk-label i {
+  width: 16px;
+  height: 16px;
+}
+
+/* ── Search results info ── */
+.search-results-info {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--sp-4);
+  padding: var(--sp-2) 0;
+}
+
+.search-results-info span {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* ── Commands grid ── */
+.commands-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--sp-4);
+}
+
+/* ── Command card ── */
+.command-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  padding: var(--sp-5);
+  transition: all var(--transition-fast);
+  animation: cardFadeIn var(--duration-200) var(--ease-out) both;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.command-card:hover {
+  border-color: var(--card-border-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+.command-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--sp-2);
+  gap: var(--sp-3);
+}
+
+.command-info {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+
+.command-name {
+  font-weight: 600;
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.command-description {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  margin-bottom: var(--sp-4);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.command-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.command-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.command-usage {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.command-cooldown,
+.command-roles-count {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.command-cooldown i,
+.command-roles-count i {
+  width: 12px;
+  height: 12px;
+}
+
+/* ── Command info header (inside modal) ── */
+.command-info-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-2);
+}
+
+/* ============================================
+   MESSAGE COMPOSER
+   ============================================ */
+.message-composer {
+  max-width: 800px;
+}
+
+.composer-header {
+  margin-bottom: var(--sp-8);
+}
+
+.composer-header h2 {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  margin-bottom: var(--sp-1);
+}
+
+.composer-header p {
+  color: var(--text-secondary);
+}
+
+.char-count {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.embed-builder {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  padding: var(--sp-6);
+  margin-bottom: var(--sp-6);
+}
+
+.message-preview {
+  margin: var(--sp-6) 0;
+}
+
+.message-preview h3 {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--sp-4);
+}
+
+.preview-container {
+  background: var(--discord-bg);
+  border-radius: var(--card-radius);
+  padding: var(--sp-6);
+}
+
+/* ============================================
+   MESSAGE HISTORY
+   ============================================ */
+.history-container {
+  max-width: 100%;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+
+.history-header h2 {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ============================================
+   DISCORD PREVIEW
+   ============================================ */
+.discord-preview {
+  background: var(--discord-bg);
+  font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.preview-message {
+  display: flex;
+  gap: var(--sp-4);
+  max-width: 600px;
+}
+
+.preview-avatar-wrapper {
+  flex-shrink: 0;
+}
+
+.preview-avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.preview-message-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.preview-bot-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  margin-bottom: 4px;
+}
+
+.preview-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.preview-badge {
+  background: var(--discord-blurple);
+  color: white;
+  font-size: 10px;
+  padding: 0 4px;
+  border-radius: 3px;
+  font-weight: 500;
+  text-transform: uppercase;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.preview-timestamp {
+  font-size: 12px;
+  color: var(--discord-text-muted);
+  margin-left: 4px;
+}
+
+.preview-content {
+  color: var(--discord-text);
+  font-size: 16px;
+  line-height: 1.375;
+  word-break: break-word;
+}
+
+.preview-placeholder {
+  color: var(--discord-text-muted);
+  font-style: italic;
+}
+
+.preview-text {
+  word-break: break-word;
+  line-height: 1.375;
+}
+
+/* ── Discord markdown ── */
+.preview-text strong,
+.preview-embed-description strong { font-weight: 700; }
+
+.preview-text em,
+.preview-embed-description em { font-style: italic; }
+
+.preview-text u,
+.preview-embed-description u { text-decoration: underline; }
+
+.preview-text s,
+.preview-embed-description s { text-decoration: line-through; }
+
+.preview-text .inline-code,
+.preview-embed-description .inline-code {
+  background: var(--discord-code-bg);
+  border-radius: 3px;
+  padding: 0.2em 0.4em;
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  color: var(--discord-text);
+}
+
+.preview-text .md-link,
+.preview-embed-description .md-link {
+  color: var(--discord-text-link);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.preview-text .md-link:hover,
+.preview-embed-description .md-link:hover {
+  text-decoration: underline;
+}
+
+.preview-text .spoiler,
+.preview-embed-description .spoiler {
+  background: var(--discord-spoiler-bg);
+  color: transparent;
+  border-radius: 3px;
+  padding: 0 2px;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.preview-text .spoiler:hover,
+.preview-embed-description .spoiler:hover {
+  background: var(--discord-spoiler-hover);
+  color: var(--discord-text);
+}
+
+.preview-text .quote,
+.preview-embed-description .quote {
+  display: block;
+  border-left: 4px solid var(--discord-quote-border);
+  padding-left: 12px;
+  margin: 4px 0;
+  color: var(--discord-quote-text);
+}
+
+.preview-text .quote-block,
+.preview-embed-description .quote-block {
+  display: block;
+  border-left: 4px solid var(--discord-quote-border);
+  padding-left: 12px;
+  padding: 8px 12px;
+  margin: 8px 0;
+  color: var(--discord-quote-text);
+  background: rgba(78, 80, 88, 0.1);
+  border-radius: 4px;
+}
+
+.preview-text .code-block,
+.preview-embed-description .code-block {
+  display: block;
+  background: var(--discord-code-bg);
+  border: 1px solid var(--discord-embed-bg);
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin: 8px 0;
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  color: var(--discord-text);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.preview-text .md-h1,
+.preview-embed-description .md-h1 {
+  font-size: 2em;
+  font-weight: 600;
+  margin: 16px 0 8px 0;
+  line-height: 1.25;
+}
+
+.preview-text .md-h2,
+.preview-embed-description .md-h2 {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin: 12px 0 8px 0;
+  line-height: 1.25;
+}
+
+.preview-text .md-h3,
+.preview-embed-description .md-h3 {
+  font-size: 1.25em;
+  font-weight: 600;
+  margin: 10px 0 8px 0;
+  line-height: 1.25;
+}
+
+.preview-text .subtext,
+.preview-embed-description .subtext {
+  font-size: 0.875em;
+  color: var(--discord-quote-text);
+  margin: 4px 0;
+}
+
+.preview-text .list-item,
+.preview-embed-description .list-item {
+  display: list-item;
+  list-style-type: disc;
+  margin: 4px 0 4px 20px;
+}
+
+.preview-text .list-item-indent,
+.preview-embed-description .list-item-indent {
+  display: list-item;
+  list-style-type: circle;
+  margin: 4px 0 4px 40px;
+}
+
+/* ── Discord embed ── */
+.preview-embed {
+  border-left: 4px solid var(--discord-blurple);
+  background: var(--discord-embed-bg);
+  border-radius: 4px;
+  padding: 12px 16px 12px 12px;
+  margin-top: 8px;
+  max-width: 520px;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto;
+  overflow: hidden;
+}
+
+.preview-embed-thumbnail {
+  width: 80px;
+  height: 80px;
+  border-radius: 4px;
+  object-fit: cover;
+  float: right;
+  margin-left: 16px;
+  margin-bottom: 8px;
+}
+
+.preview-embed-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--discord-text-link);
+  margin-bottom: 8px;
+}
+
+.preview-embed-description {
+  font-size: 14px;
+  color: var(--discord-text);
+  line-height: 1.125em;
+  white-space: pre-wrap;
+}
+
+.preview-embed-image {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 4px;
+  margin-top: 16px;
+  clear: both;
+}
+
+.preview-embed-footer {
+  font-size: 12px;
+  color: var(--discord-text);
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ============================================
+   USER SEARCH (DMs)
+   ============================================ */
+.user-search-container {
+  position: relative;
+}
+
+.user-search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: var(--z-dropdown);
+  display: none;
+  box-shadow: var(--shadow-lg);
+}
+
+.user-search-results.active {
+  display: block;
+}
+
+.user-search-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.user-search-item:hover {
+  background: var(--bg-hover);
+}
+
+.user-search-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.user-search-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-search-name {
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.user-search-tag {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.user-search-empty {
+  padding: var(--sp-6);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+/* ============================================
+   ROLE SELECTOR
+   ============================================ */
+.role-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.role-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-1) var(--sp-2);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-size: var(--text-xs);
+  transition: all var(--transition-fast);
+}
+
+.role-chip:hover {
+  border-color: var(--role-color, var(--border-light));
+}
+
+.role-chip input {
+  display: none;
+}
+
+.role-chip input:checked + span {
+  color: var(--role-color, var(--primary));
+}
+
+.role-chip:has(input:checked) {
+  border-color: var(--role-color, var(--primary));
+  background: var(--primary-bg);
+}
+
+/* ============================================
+   PARTICIPANTS MODAL
+   ============================================ */
+.participants-modal h3 {
+  font-size: var(--text-xl);
+  margin-bottom: var(--sp-1);
+}
+
+.participants-count {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  margin-bottom: var(--sp-6);
+}
+
+.participants-list {
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.participant-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  transition: background var(--transition-fast);
+}
+
+.participant-item:hover {
+  background: var(--bg-hover);
+}
+
+.participant-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.participant-item i {
+  width: 32px;
+  height: 32px;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-light);
+  border-radius: 50%;
+}
+
+.participant-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.participant-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.participant-username {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.no-participants {
+  text-align: center;
+  color: var(--text-muted);
+  padding: var(--sp-8);
+}
+
+/* ============================================
+   RESPONSIVE — Pages
+   ============================================ */
+@media (max-width: 768px) {
+  .user-profile-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-info {
+    flex-direction: column;
+  }
+
+  .user-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .guilds-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .guilds-search-wrapper {
+    max-width: none;
+  }
+
+  .guilds-filter-group {
+    justify-content: center;
+  }
+
+  .guilds-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .giveaways-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .commands-list {
+    grid-template-columns: 1fr;
+  }
+
+  .commands-stats {
+    gap: var(--sp-2);
+  }
+
+  .stat-pill {
+    font-size: var(--text-xs);
+    padding: var(--sp-1) var(--sp-3);
+  }
+
+  .bulk-actions {
+    flex-wrap: wrap;
+  }
+
+  .preview-embed {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .giveaway-card {
+    padding: var(--sp-4);
+  }
+
+  .giveaway-meta {
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+
+  .command-card {
+    padding: var(--sp-3);
+  }
+
+  .command-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-1);
+  }
+
+  .command-card-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--sp-2);
+  }
+
+  .category-filter {
+    gap: var(--sp-1);
+  }
+
+  .category-btn {
+    font-size: var(--text-xs);
+    padding: var(--sp-1) var(--sp-3);
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "selfbump",
+  "description": "Gérer l'auto-bump du serveur",
+  "admin": true,
+  "usage": "/selfbump <status|start|stop>",
+  "examples": [
+    "/selfbump status",
+    "/selfbump start",
+    "/selfbump stop"
+  ],
+  "details": "Gère l'auto-bump du serveur. **Configuration requise via le Dashboard** avant la première utilisation. Commandes disponibles :\n- `/selfbump status` : Affiche le statut actuel de l'auto-bump\n- `/selfbump start` : Démarre l'auto-bump\n- `/selfbump stop` : Arrête l'auto-bump"
+}
