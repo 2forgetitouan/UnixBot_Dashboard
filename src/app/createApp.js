@@ -4,6 +4,7 @@ const path = require('path');
 const session = require('express-session');
 const config = require('../../config/config');
 const { createRateLimiter } = require('../middleware/rateLimit');
+const { ensureCsrfToken, csrfProtection } = require('../middleware/csrf');
 const SQLiteStore = require('../session/sqliteStore');
 const authRoutes = require('../routes/api/auth');
 const guildRoutes = require('../routes/api/guilds');
@@ -49,6 +50,7 @@ function createApp(db) {
       },
     })
   );
+  app.use(ensureCsrfToken);
 
   app.use(
     '/api',
@@ -62,6 +64,7 @@ function createApp(db) {
     windowMs: config.security.rateLimitWindowMs,
     max: config.security.loginRateLimitMax,
   }));
+  app.use('/api', csrfProtection);
 
   app.set('view engine', 'ejs');
   app.set('views', path.resolve(__dirname, '../web/views'));

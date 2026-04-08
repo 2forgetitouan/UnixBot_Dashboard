@@ -14,7 +14,10 @@ form?.addEventListener('submit', async (event) => {
   try {
     const response = await fetch('/api/auth/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-csrf-token': window.__CSRF_TOKEN || '',
+      },
       body: JSON.stringify(payload),
     });
 

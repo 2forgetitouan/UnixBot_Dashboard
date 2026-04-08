@@ -1,5 +1,6 @@
 const appView = document.getElementById('app-view');
 const logoutBtn = document.getElementById('logout-btn');
+const csrfToken = window.__CSRF_TOKEN || '';
 
 async function getJson(url, options = {}) {
   const response = await fetch(url, options);
@@ -44,7 +45,10 @@ document.querySelectorAll('[data-view]').forEach((button) => {
 });
 
 logoutBtn?.addEventListener('click', async () => {
-  await fetch('/api/auth/logout', { method: 'POST' });
+  await fetch('/api/auth/logout', {
+    method: 'POST',
+    headers: { 'x-csrf-token': csrfToken },
+  });
   window.location.href = '/login';
 });
 

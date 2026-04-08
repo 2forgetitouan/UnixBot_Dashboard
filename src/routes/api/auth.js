@@ -15,6 +15,7 @@ router.get('/me', (req, res) => {
       username: req.session.user.username,
       role: req.session.user.role,
     },
+    csrfToken: req.session.csrfToken,
   });
 });
 

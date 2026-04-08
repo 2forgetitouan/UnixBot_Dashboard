@@ -1,9 +1,20 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const { getDb } = require('../../database/init');
 const { requireAuth } = require('../../middleware/auth');
 const { validateGuildSettings } = require('../../middleware/validators');
+const config = require('../../../config/config');
 
 const router = express.Router();
+router.use(
+  rateLimit({
+    windowMs: config.security.rateLimitWindowMs,
+    max: Math.max(10, Math.floor(config.security.rateLimitMax / 2)),
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { ok: false, error: 'Too many requests' },
+  })
+);
 router.use(requireAuth);
 
 router.get('/', (req, res) => {
