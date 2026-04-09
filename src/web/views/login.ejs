@@ -1,19 +1,34 @@
 <%- include('partials/header') %>
-<section class="card auth-card">
-  <h1>Connexion administrateur</h1>
-  <p>Utilisez vos identifiants Dashboard.</p>
-  <form id="login-form" class="form-grid">
-    <label>
-      <span>Utilisateur</span>
-      <input type="text" name="username" required autocomplete="username" />
-    </label>
-    <label>
-      <span>Mot de passe</span>
-      <input type="password" name="password" required autocomplete="current-password" />
-    </label>
-    <button type="submit" class="btn btn-primary">Se connecter</button>
-    <p id="login-error" class="error" hidden></p>
-  </form>
+<section class="auth-layout">
+  <section class="card auth-card">
+    <h1>Connexion Dashboard</h1>
+    <p>Connectez-vous avec Discord pour gérer vos serveurs.</p>
+    <% if (discordOAuthEnabled) { %>
+      <a class="btn btn-discord" href="/api/auth/discord/login">Se connecter avec Discord</a>
+    <% } else { %>
+      <p class="muted">OAuth Discord non configuré sur cette instance.</p>
+    <% } %>
+    <% if (errorCode) { %>
+      <p class="error">Erreur OAuth: <%= errorCode %></p>
+    <% } %>
+  </section>
+
+  <section class="card auth-card">
+    <h2>Connexion locale (fallback)</h2>
+    <p class="muted">Utilisez le compte local pour maintenance.</p>
+    <form id="login-form" class="form-grid">
+      <label>
+        <span>Utilisateur</span>
+        <input type="text" name="username" required autocomplete="username" />
+      </label>
+      <label>
+        <span>Mot de passe</span>
+        <input type="password" name="password" required autocomplete="current-password" />
+      </label>
+      <button type="submit" class="btn btn-primary">Connexion locale</button>
+      <p id="login-error" class="error" hidden></p>
+    </form>
+  </section>
 </section>
 <script src="/assets/js/login.js" defer></script>
 <%- include('partials/footer') %>

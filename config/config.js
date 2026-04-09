@@ -33,6 +33,13 @@ module.exports = {
       'DASHBOARD_ADMIN_PASSWORD'
     ),
   },
+  discord: {
+    clientId: process.env.DISCORD_CLIENT_ID || '',
+    clientSecret: process.env.DISCORD_CLIENT_SECRET || '',
+    redirectUri: process.env.DISCORD_REDIRECT_URI || 'http://localhost:3000/api/auth/discord/callback',
+    botToken: process.env.DISCORD_BOT_TOKEN || '',
+    scope: process.env.DISCORD_OAUTH_SCOPE || 'identify guilds',
+  },
   security: {
     trustProxy: parseIntEnv('TRUST_PROXY', 1),
     rateLimitWindowMs: parseIntEnv('RATE_LIMIT_WINDOW_MS', 60_000),

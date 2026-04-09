@@ -1,9 +1,24 @@
 <%- include('partials/header') %>
 <section class="hero">
-  <h1>Un Dashboard UnixBot reconstruit proprement</h1>
-  <p>Architecture modulaire, sécurité renforcée, base prête pour évoluer.</p>
+  <h1>Dashboard UnixBot évolutif</h1>
+  <p><%= subtitle %></p>
   <div class="actions">
-    <a class="btn btn-primary" href="/login">Accéder au Dashboard</a>
+    <a class="btn btn-primary" href="/dashboard">Ouvrir le dashboard</a>
+    <a class="btn btn-secondary" href="/login">Connexion</a>
   </div>
+</section>
+<section class="feature-grid">
+  <article class="card">
+    <h2>Gestion serveurs</h2>
+    <p>Liste des serveurs administrables, synchronisation Discord et vue centralisée.</p>
+  </article>
+  <article class="card">
+    <h2>Modules & permissions</h2>
+    <p>Activation fine des modules bot et règles de droits par rôle serveur.</p>
+  </article>
+  <article class="card">
+    <h2>Sécurité</h2>
+    <p>Session sécurisée, CSRF, rate limiting et journalisation d’audit intégrée.</p>
+  </article>
 </section>
 <%- include('partials/footer') %>

@@ -45,6 +45,36 @@ function validateGuildSettings(body) {
   return { errors, data };
 }
 
+function validateModuleState(body) {
+  if (typeof body?.enabled !== 'boolean') {
+    return { errors: ['enabled must be a boolean'], data: null };
+  }
+  return {
+    errors: [],
+    data: {
+      enabled: body.enabled,
+    },
+  };
+}
+
+function validateRolePermissionPayload(body) {
+  const flags = ['canManageSettings', 'canManageModules', 'canManageUsers'];
+  const data = {};
+  const errors = [];
+
+  flags.forEach((flag) => {
+    if (typeof body?.[flag] !== 'boolean') {
+      errors.push(`${flag} must be a boolean`);
+    } else {
+      data[flag] = body[flag];
+    }
+  });
+
+  return { errors, data };
+}
+
 module.exports = {
   validateGuildSettings,
+  validateModuleState,
+  validateRolePermissionPayload,
 };

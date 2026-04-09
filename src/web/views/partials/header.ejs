@@ -10,8 +10,9 @@
 <header class="topbar">
   <div class="container topbar-content">
     <a href="/" class="brand">UnixBot Dashboard</a>
-    <nav>
+    <nav class="topbar-nav">
       <% if (user) { %>
+        <span class="chip"><%= user.username %></span>
         <a href="/dashboard">Dashboard</a>
       <% } else { %>
         <a href="/login">Connexion</a>
