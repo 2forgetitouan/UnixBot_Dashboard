@@ -30,9 +30,13 @@ async function request(url, options = {}) {
 
   const data = await response.json();
   if (!response.ok || !data.ok) {
-    throw new Error(data.error || 'Erreur API');
+    throw new Error(data.error || `Erreur API (${response.status}) sur ${url}`);
   }
   return data;
+}
+
+function roleCheckbox(roleId, flag) {
+  return document.querySelector(`[data-role="${roleId}"][data-flag="${flag}"]`);
 }
 
 function requireGuildSelection() {
@@ -205,9 +209,9 @@ async function loadRoles() {
     button.addEventListener('click', async () => {
       const roleId = button.dataset.saveRole;
       const payload = {
-        canManageSettings: Boolean(document.querySelector(`[data-role="${roleId}"][data-flag="canManageSettings"]`)?.checked),
-        canManageModules: Boolean(document.querySelector(`[data-role="${roleId}"][data-flag="canManageModules"]`)?.checked),
-        canManageUsers: Boolean(document.querySelector(`[data-role="${roleId}"][data-flag="canManageUsers"]`)?.checked),
+        canManageSettings: Boolean(roleCheckbox(roleId, 'canManageSettings')?.checked),
+        canManageModules: Boolean(roleCheckbox(roleId, 'canManageModules')?.checked),
+        canManageUsers: Boolean(roleCheckbox(roleId, 'canManageUsers')?.checked),
       };
 
       try {
@@ -281,8 +285,17 @@ async function syncGuild() {
   if (!requireGuildSelection()) return;
 
   try {
+    const [rolesData, usersData] = await Promise.all([
+      request(`/api/guilds/${state.selectedGuildId}/roles`),
+      request(`/api/guilds/${state.selectedGuildId}/users`),
+    ]);
+
     const data = await request(`/api/guilds/${state.selectedGuildId}/sync`, {
       method: 'POST',
+      body: JSON.stringify({
+        roles: rolesData.roles,
+        users: usersData.users,
+      }),
     });
     notify(`Sync Discord terminée (${data.synced.roles} rôles / ${data.synced.users} utilisateurs)`, 'success');
   } catch (error) {
@@ -322,7 +335,9 @@ async function bootstrap() {
     state.me = await request('/api/auth/me');
     contextLine.textContent = `Connecté en ${state.me.user.username} (${state.me.user.provider})`;
     await loadGuilds();
-  } catch {
+  } catch (error) {
+    console.error('Dashboard bootstrap failed:', error);
+    notify('Session invalide ou expirée (déconnexion distante possible). Reconnectez-vous.', 'error');
     window.location.href = '/login';
   }
 }

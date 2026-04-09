@@ -28,6 +28,12 @@ router.use(
   })
 );
 router.use(requireAuth);
+router.param('guildId', (req, res, next, guildId) => {
+  if (!/^\d{17,20}$/.test(String(guildId || ''))) {
+    return res.status(400).json({ ok: false, error: 'Invalid guildId format' });
+  }
+  return next();
+});
 
 function audit(req, action, targetType, targetId, payload) {
   const db = require('../../database/init').getDb();
@@ -118,45 +124,40 @@ router.put('/:guildId/modules/:moduleKey', requireGuildAdmin, (req, res) => {
 
 router.post('/:guildId/sync', requireGuildAdmin, async (req, res) => {
   const { guildId } = req.params;
+  const roles = syncService.normalizeRoles(req.body?.roles);
+  const members = syncService.normalizeMembers(req.body?.users);
 
-  if (!syncService.isConfigured()) {
-    return res.status(503).json({ ok: false, error: 'Discord bot sync is not configured' });
+  if (!roles.length || !members.length) {
+    return res.status(400).json({
+      ok: false,
+      error: 'Sync payload must include non-empty roles and users arrays',
+    });
   }
 
-  try {
-    const [roles, membersPayload] = await Promise.all([
-      syncService.fetchGuildRoles(guildId),
-      syncService.fetchGuildMembers(guildId),
-    ]);
+  const roleById = new Map(roles.map((role) => [String(role.id), String(role.permissions || '0')]));
+  const ADMINISTRATOR = 0x8n;
 
-    const members = syncService.normalizeMembers(membersPayload);
-    const roleById = new Map(roles.map((role) => [String(role.id), String(role.permissions || '0')]));
-
-    const ADMINISTRATOR = 0x8n;
-    members.forEach((member) => {
-      member.isAdmin = member.roles.some((roleId) => {
-        try {
-          const perms = BigInt(roleById.get(String(roleId)) || '0');
-          return (perms & ADMINISTRATOR) !== 0n;
-        } catch {
-          return false;
-        }
-      });
+  members.forEach((member) => {
+    member.isAdmin = member.roles.some((roleId) => {
+      try {
+        const perms = BigInt(roleById.get(String(roleId)) || '0');
+        return (perms & ADMINISTRATOR) !== 0n;
+      } catch {
+        return false;
+      }
     });
+  });
 
-    guildRepository.syncGuildRoles(guildId, roles);
-    guildRepository.syncGuildUsers(guildId, members);
-    rbacRepository.ensureDefaultRolePermissions(guildId);
+  guildRepository.syncGuildRoles(guildId, roles);
+  guildRepository.syncGuildUsers(guildId, members);
+  rbacRepository.ensureDefaultRolePermissions(guildId);
 
-    audit(req, 'sync_discord_guild_data', 'guild', guildId, {
-      roles: roles.length,
-      users: members.length,
-    });
+  audit(req, 'sync_discord_guild_data', 'guild', guildId, {
+    roles: roles.length,
+    users: members.length,
+  });
 
-    return res.json({ ok: true, synced: { roles: roles.length, users: members.length } });
-  } catch (error) {
-    return res.status(502).json({ ok: false, error: error.message });
-  }
+  return res.json({ ok: true, synced: { roles: roles.length, users: members.length } });
 });
 
 router.get('/:guildId/roles', requireGuildAdmin, (req, res) => {

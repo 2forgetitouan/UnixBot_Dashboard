@@ -12,11 +12,16 @@ form?.addEventListener('submit', async (event) => {
   };
 
   try {
+    const csrfToken = window.__CSRF_TOKEN;
+    if (!csrfToken) {
+      throw new Error('CSRF token manquant. Rechargez la page, puis réessayez. Si le problème persiste, videz les cookies de session.');
+    }
+
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-csrf-token': window.__CSRF_TOKEN || '',
+        'x-csrf-token': csrfToken,
       },
       body: JSON.stringify(payload),
     });
