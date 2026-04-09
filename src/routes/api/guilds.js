@@ -57,6 +57,26 @@ router.get('/:guildId/overview', requireGuildAdmin, (req, res) => {
   return res.json({ ok: true, ...overview });
 });
 
+router.get('/:guildId/home', requireGuildAdmin, (req, res) => {
+  const { guildId } = req.params;
+  const home = guildRepository.getGuildHomepageData(guildId);
+  if (!home) {
+    return res.status(404).json({ ok: false, error: 'Guild not found' });
+  }
+  return res.json({ ok: true, ...home });
+});
+
+router.get('/:guildId/activity', requireGuildAdmin, (req, res) => {
+  const { guildId } = req.params;
+  if (!guildRepository.getGuildById(guildId)) {
+    return res.status(404).json({ ok: false, error: 'Guild not found' });
+  }
+
+  const limit = Number.parseInt(String(req.query?.limit || '10'), 10);
+  const activity = guildRepository.listRecentActivity(guildId, Number.isFinite(limit) ? limit : 10);
+  return res.json({ ok: true, activity });
+});
+
 router.get('/:guildId/settings', requireGuildAdmin, (req, res) => {
   const { guildId } = req.params;
   const guild = guildRepository.getGuildById(guildId);

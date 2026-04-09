@@ -94,6 +94,60 @@ class GuildRepository {
     };
   }
 
+  listRecentActivity(guildId, limit = 10) {
+    const safeLimit = Math.max(1, Math.min(Number(limit) || 10, 50));
+    return this.db
+      .prepare(
+        `SELECT actor, action, target_type as targetType, target_id as targetId, created_at as createdAt
+         FROM audit_logs
+         WHERE target_id = ? OR target_id LIKE ?
+         ORDER BY created_at DESC, id DESC
+         LIMIT ?`
+      )
+      .all(guildId, `${guildId}:%`, safeLimit);
+  }
+
+  getGuildHomepageData(guildId) {
+    const overview = this.getGuildOverview(guildId);
+    if (!overview?.guild) return null;
+
+    const modules = this.db
+      .prepare(
+        `SELECT gm.module_key as key, bm.display_name as name, gm.enabled, gm.updated_at as updatedAt
+         FROM guild_modules gm
+         INNER JOIN bot_modules bm ON bm.module_key = gm.module_key
+         WHERE gm.guild_id = ?
+         ORDER BY bm.display_name ASC`
+      )
+      .all(guildId)
+      .map((module) => ({
+        ...module,
+        enabled: module.enabled === 1,
+      }));
+
+    const syncStats = this.db
+      .prepare(
+        `SELECT MAX(synced_at) as lastSyncedAt,
+                (SELECT COUNT(*) FROM guild_users WHERE guild_id = ?) as syncedUsers,
+                (SELECT COUNT(*) FROM guild_roles WHERE guild_id = ?) as syncedRoles`
+      )
+      .get(guildId, guildId);
+
+    const botStatus = overview.metrics.modulesTotal > 0 ? 'online' : 'unknown';
+
+    return {
+      ...overview,
+      bot: {
+        status: botStatus,
+        lastSyncedAt: syncStats?.lastSyncedAt || null,
+        syncedUsers: syncStats?.syncedUsers || 0,
+        syncedRoles: syncStats?.syncedRoles || 0,
+      },
+      modules,
+      activity: this.listRecentActivity(guildId, 10),
+    };
+  }
+
   syncGuildRoles(guildId, roles) {
     const clear = this.db.prepare('DELETE FROM guild_roles WHERE guild_id = ?');
     const insert = this.db.prepare(
