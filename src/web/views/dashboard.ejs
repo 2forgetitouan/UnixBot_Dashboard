@@ -1,0 +1,26 @@
+<%- include('partials/header') %>
+<section class="dashboard-grid">
+  <aside class="card side">
+    <h2>Navigation</h2>
+    <ul>
+      <li><button class="link-btn" data-view="home">Accueil</button></li>
+      <li><button class="link-btn" data-view="guilds">Serveurs</button></li>
+      <li><button class="link-btn" data-view="overview">Vue serveur</button></li>
+      <li><button class="link-btn" data-view="modules">Modules</button></li>
+      <li><button class="link-btn" data-view="roles">Rôles & permissions</button></li>
+      <li><button class="link-btn" data-view="users">Utilisateurs</button></li>
+      <li><button class="link-btn" data-view="settings">Paramètres bot</button></li>
+      <li><button class="link-btn" id="sync-btn">Synchroniser Discord</button></li>
+      <li><button class="link-btn" id="logout-btn">Déconnexion</button></li>
+    </ul>
+  </aside>
+  <section class="card content">
+    <h1>Dashboard</h1>
+    <p class="muted" id="context-line">Chargement du contexte utilisateur...</p>
+    <div id="app-alert"></div>
+    <div id="dashboard-server-selector"></div>
+    <div id="app-view"></div>
+  </section>
+</section>
+<script src="/assets/js/dashboard.js" defer></script>
+<%- include('partials/footer') %>

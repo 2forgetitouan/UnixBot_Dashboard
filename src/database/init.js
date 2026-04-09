@@ -1,136 +1,156 @@
-/**
- * Module d'initialisation de la base de données SQLite v2
- * Gère la connexion, les migrations et le pool de connexions
- * @module database/init
- */
+const fs = require('fs');
+const path = require('path');
+const Database = require('better-sqlite3');
+const config = require('../../config/config');
 
-const Database = require("better-sqlite3");
-const path = require("path");
-const fs = require("fs");
+const dbPath = path.resolve(process.cwd(), config.database.path);
+const schemaPath = path.resolve(__dirname, 'schema.sql');
 
-const DB_PATH = path.join(__dirname, "../../database/bot.db");
-const SCHEMA_PATH = path.join(__dirname, "schema.sql");
+let db;
 
-let db = null;
-
-/**
- * Initialise la connexion à la base de données
- * @returns {Database} Instance de la base de données
- */
-function initDatabase() {
-  if (db) {
-    return db;
-  }
-
-  try {
-    // Créer le dossier database s'il n'existe pas
-    const dbDir = path.dirname(DB_PATH);
-    if (!fs.existsSync(dbDir)) {
-      fs.mkdirSync(dbDir, { recursive: true });
-    }
-
-    // Ouvrir la connexion
-    db = new Database(DB_PATH, {
-      verbose: process.env.DEBUG === "true" ? console.log : null,
-    });
-
-    // Configuration pour de meilleures performances
-    db.pragma("journal_mode = WAL");
-    db.pragma("foreign_keys = ON");
-    db.pragma("synchronous = NORMAL");
-    db.pragma("cache_size = -64000"); // 64MB cache
-    db.pragma("temp_store = MEMORY");
-
-    console.log("✅ Base de données SQLite initialisée:", DB_PATH);
-
-    // Exécuter les migrations
-    runMigrations();
-
-    return db;
-  } catch (error) {
-    console.error(
-      "❌ Erreur lors de l'initialisation de la base de données:",
-      error
-    );
-    throw error;
-  }
-}
-
-/**
- * Exécute les migrations du schéma
- */
-function runMigrations() {
-  try {
-    if (!fs.existsSync(SCHEMA_PATH)) {
-      console.warn(
-        "⚠️  Fichier schema-v2.sql introuvable, aucune migration appliquée"
-      );
-      return;
-    }
-
-    const schema = fs.readFileSync(SCHEMA_PATH, "utf8");
-
-    // Exécuter le schéma complet
-    db.exec(schema);
-
-    console.log("✅ Migrations v2 appliquées avec succès");
-  } catch (error) {
-    console.error("❌ Erreur lors de l'application des migrations:", error);
-    throw error;
-  }
-}
-
-/**
- * Récupère l'instance de la base de données
- * @returns {Database} Instance de la base de données
- */
-function getDatabase() {
+function getDb() {
   if (!db) {
-    return initDatabase();
+    db = new Database(dbPath);
+    db.pragma('foreign_keys = ON');
   }
   return db;
 }
 
-/**
- * Ferme proprement la connexion à la base de données
- */
+function runSchema() {
+  const schemaSql = fs.readFileSync(schemaPath, 'utf8');
+  getDb().exec(schemaSql);
+}
+
+function bootstrapGuilds(connection) {
+  const count = connection.prepare('SELECT COUNT(*) as count FROM guilds').get();
+  if (count.count > 0) return;
+
+  const seedGuilds = [
+    { id: '100000000000000001', name: 'UnixBot Community' },
+    { id: '100000000000000002', name: 'UnixBot Support' },
+  ];
+
+  const insertGuild = connection.prepare(
+    `INSERT INTO guilds (id, name, icon, updated_at)
+     VALUES (?, ?, NULL, strftime('%s','now'))`
+  );
+  const insertSettings = connection.prepare('INSERT OR IGNORE INTO guild_settings (guild_id) VALUES (?)');
+
+  const tx = connection.transaction(() => {
+    seedGuilds.forEach((guild) => {
+      insertGuild.run(guild.id, guild.name);
+      insertSettings.run(guild.id);
+    });
+  });
+
+  tx();
+}
+
+function bootstrapModules(connection) {
+  const modules = [
+    { key: 'moderation', name: 'Modération', description: 'Commandes de modération et sécurité', enabled: 1 },
+    { key: 'giveaways', name: 'Giveaways', description: 'Création et gestion des giveaways', enabled: 1 },
+    { key: 'autobump', name: 'Auto-Bump', description: 'Automatisation des bumps de serveurs', enabled: 0 },
+    { key: 'messages', name: 'Messages', description: 'Messages, annonces et automation', enabled: 1 },
+    { key: 'utility', name: 'Utilitaires', description: 'Fonctions utilitaires diverses', enabled: 1 },
+  ];
+
+  const insertModule = connection.prepare(
+    `INSERT OR IGNORE INTO bot_modules (module_key, display_name, description, default_enabled)
+     VALUES (@key, @name, @description, @enabled)`
+  );
+
+  const guildRows = connection.prepare('SELECT id FROM guilds').all();
+  const insertGuildModule = connection.prepare(
+    `INSERT OR IGNORE INTO guild_modules (guild_id, module_key, enabled, updated_at)
+     VALUES (?, ?, ?, strftime('%s','now'))`
+  );
+
+  const tx = connection.transaction(() => {
+    modules.forEach((module) => insertModule.run(module));
+    guildRows.forEach((guild) => {
+      modules.forEach((module) => {
+        insertGuildModule.run(guild.id, module.key, module.enabled);
+      });
+    });
+  });
+
+  tx();
+}
+
+function bootstrapRolesAndUsers(connection) {
+  const guildRows = connection.prepare('SELECT id FROM guilds').all();
+  const roleCount = connection.prepare('SELECT COUNT(*) as count FROM guild_roles').get();
+  const userCount = connection.prepare('SELECT COUNT(*) as count FROM guild_users').get();
+  if (roleCount.count > 0 && userCount.count > 0) return;
+
+  const roleSeed = [
+    { id: '1', name: 'Owner', position: 100, perms: '8', managed: 0, canSettings: 1, canModules: 1, canUsers: 1 },
+    { id: '2', name: 'Admin', position: 90, perms: '8', managed: 0, canSettings: 1, canModules: 1, canUsers: 1 },
+    { id: '3', name: 'Moderator', position: 50, perms: '32', managed: 0, canSettings: 0, canModules: 1, canUsers: 0 },
+  ];
+
+  const usersSeed = [
+    { id: 'demo-owner', username: 'DemoOwner', displayName: 'Demo Owner', admin: 1, roles: ['1'] },
+    { id: 'demo-admin', username: 'DemoAdmin', displayName: 'Demo Admin', admin: 1, roles: ['2'] },
+    { id: 'demo-mod', username: 'DemoMod', displayName: 'Demo Moderator', admin: 0, roles: ['3'] },
+  ];
+
+  const insertRole = connection.prepare(
+    `INSERT OR IGNORE INTO guild_roles (guild_id, role_id, name, position, permissions, is_managed, synced_at)
+     VALUES (?, ?, ?, ?, ?, ?, strftime('%s','now'))`
+  );
+  const insertRolePerm = connection.prepare(
+    `INSERT OR IGNORE INTO role_dashboard_permissions (
+      guild_id, role_id, can_manage_settings, can_manage_modules, can_manage_users, updated_at
+    ) VALUES (?, ?, ?, ?, ?, strftime('%s','now'))`
+  );
+  const insertUser = connection.prepare(
+    `INSERT OR IGNORE INTO guild_users (guild_id, user_id, username, display_name, is_admin, synced_at)
+     VALUES (?, ?, ?, ?, ?, strftime('%s','now'))`
+  );
+  const insertUserRole = connection.prepare(
+    `INSERT OR IGNORE INTO guild_user_roles (guild_id, user_id, role_id)
+     VALUES (?, ?, ?)`
+  );
+
+  const tx = connection.transaction(() => {
+    guildRows.forEach((guild) => {
+      roleSeed.forEach((role) => {
+        insertRole.run(guild.id, role.id, role.name, role.position, role.perms, role.managed);
+        insertRolePerm.run(guild.id, role.id, role.canSettings, role.canModules, role.canUsers);
+      });
+
+      usersSeed.forEach((user) => {
+        insertUser.run(guild.id, user.id, user.username, user.displayName, user.admin);
+        user.roles.forEach((roleId) => {
+          insertUserRole.run(guild.id, user.id, roleId);
+        });
+      });
+    });
+  });
+
+  tx();
+}
+
+function initDatabase() {
+  runSchema();
+  const connection = getDb();
+  bootstrapGuilds(connection);
+  bootstrapModules(connection);
+  bootstrapRolesAndUsers(connection);
+  return connection;
+}
+
 function closeDatabase() {
   if (db) {
-    try {
-      db.close();
-      db = null;
-      console.log("✅ Connexion à la base de données fermée");
-    } catch (error) {
-      console.error("❌ Erreur lors de la fermeture de la DB:", error);
-    }
+    db.close();
+    db = null;
   }
-}
-
-/**
- * Exécute une requête dans une transaction
- * @param {Function} fn - Fonction contenant les requêtes
- * @returns {any} Résultat de la fonction
- */
-function transaction(fn) {
-  const database = getDatabase();
-  return database.transaction(fn)();
-}
-
-/**
- * Effectue un backup de la base de données
- * @param {string} backupPath - Chemin du fichier de backup
- * @returns {Promise<void>}
- */
-async function backupDatabase(backupPath) {
-  const database = getDatabase();
-  await database.backup(backupPath);
-  console.log(`✅ Backup créé: ${backupPath}`);
 }
 
 module.exports = {
   initDatabase,
-  getDatabase,
   closeDatabase,
-  transaction,
-  backupDatabase,
+  getDb,
 };

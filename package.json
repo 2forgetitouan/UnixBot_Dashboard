@@ -5,7 +5,8 @@
   "description": "Export autonome du Dashboard UnixBot",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "test": "node --test"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -19,6 +20,7 @@
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-ejs-layouts": "^2.5.1",
+    "express-rate-limit": "^7.4.1",
     "express-session": "^1.18.1",
     "helmet": "^8.1.0"
   }
