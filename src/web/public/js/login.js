@@ -14,7 +14,7 @@ form?.addEventListener('submit', async (event) => {
   try {
     const csrfToken = window.__CSRF_TOKEN;
     if (!csrfToken) {
-      throw new Error('CSRF token manquant. Rechargez la page, puis réessayez. Si le problème persiste, videz les cookies de session.');
+      throw new Error('Session expirée. Veuillez recharger la page.');
     }
 
     const response = await fetch('/api/auth/login', {

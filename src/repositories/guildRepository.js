@@ -127,11 +127,11 @@ class GuildRepository {
 
     const syncStats = this.db
       .prepare(
-        `SELECT MAX(synced_at) as lastSyncedAt,
+        `SELECT (SELECT MAX(synced_at) FROM guild_users WHERE guild_id = ?) as lastSyncedAt,
                 (SELECT COUNT(*) FROM guild_users WHERE guild_id = ?) as syncedUsers,
                 (SELECT COUNT(*) FROM guild_roles WHERE guild_id = ?) as syncedRoles`
       )
-      .get(guildId, guildId);
+      .get(guildId, guildId, guildId);
 
     const botStatus = overview.metrics.modulesTotal > 0 ? 'online' : 'unknown';
 

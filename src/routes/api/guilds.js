@@ -24,7 +24,7 @@ router.use(
     max: Math.max(10, Math.floor(config.security.rateLimitMax / 2)),
     standardHeaders: true,
     legacyHeaders: false,
-    message: { ok: false, error: 'Too many requests' },
+    message: { ok: false, error: 'Trop de requêtes' },
   })
 );
 router.use(requireAuth);

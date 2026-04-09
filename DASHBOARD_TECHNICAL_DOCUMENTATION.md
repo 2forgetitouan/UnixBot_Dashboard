@@ -88,7 +88,9 @@ Le Dashboard est désormais structuré pour du long terme avec des features conc
 
 ### Guild management
 - `GET /api/guilds`
+- `GET /api/guilds/:guildId/home`
 - `GET /api/guilds/:guildId/overview`
+- `GET /api/guilds/:guildId/activity`
 - `GET/PUT /api/guilds/:guildId/settings`
 - `GET /api/guilds/:guildId/modules`
 - `PUT /api/guilds/:guildId/modules/:moduleKey`
@@ -109,10 +111,25 @@ Scripts npm:
 Tests actuels:
 - validations payload middleware
 - logique permissions Discord (bits admin/manage guild)
+- repository homepage (`getGuildHomepageData`) + activité récente filtrée
 
 ---
 
-## 7) Démarrage
+## 7) Homepage Dashboard
+
+La page principale `/dashboard` est maintenant orientée usage réel:
+- vue d’ensemble utilisateur (profil/session/provider),
+- sélecteur serveur persistant (nom + icône + permissions déjà filtrées côté API),
+- panneau de statut bot (modules, sync, compteurs),
+- résumé des configurations critiques,
+- historique d’activité récente (audit logs),
+- accès rapides vers settings/modules/rôles/utilisateurs.
+
+Les états `loading`, `empty`, `error` sont gérés côté frontend pour chaque vue.
+
+---
+
+## 8) Démarrage
 
 1. Copier `.env.example` vers `.env`
 2. Renseigner au minimum les secrets session et admin local

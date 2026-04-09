@@ -8,7 +8,7 @@ function createRateLimiter({ windowMs, max }) {
     legacyHeaders: false,
     message: {
       ok: false,
-      error: 'Too many requests',
+      error: 'Trop de requêtes',
     },
   });
 }

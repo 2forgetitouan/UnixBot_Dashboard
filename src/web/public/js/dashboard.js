@@ -5,7 +5,7 @@ const selectorContainer = document.getElementById('dashboard-server-selector');
 const logoutBtn = document.getElementById('logout-btn');
 const syncBtn = document.getElementById('sync-btn');
 
-const csrfToken = window.__CSRF_TOKEN || '';
+const csrfToken = window.__CSRF_TOKEN;
 const state = {
   me: null,
   guilds: [],
@@ -13,7 +13,7 @@ const state = {
   currentView: 'home',
 };
 
-function esc(value) {
+function escapeHtml(value) {
   return String(value ?? '')
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
@@ -23,7 +23,8 @@ function esc(value) {
 }
 
 function notify(message, type = 'info') {
-  alertBox.innerHTML = `<p class="alert alert-${esc(type)}">${esc(message)}</p>`;
+  const safeType = ['info', 'success', 'error', 'warning'].includes(type) ? type : 'info';
+  alertBox.innerHTML = `<p class="alert alert-${safeType}">${escapeHtml(message)}</p>`;
   setTimeout(() => {
     alertBox.innerHTML = '';
   }, 4000);
@@ -44,17 +45,26 @@ function selectedGuild() {
 }
 
 function setLoading(message) {
-  appView.innerHTML = `<p class="muted">${esc(message)}</p>`;
+  appView.innerHTML = `<p class="muted">${escapeHtml(message)}</p>`;
 }
 
 async function request(url, options = {}) {
+  if (!csrfToken || typeof csrfToken !== 'string') {
+    throw new Error('Session expirée. Veuillez recharger la page.');
+  }
+
+  const headers = {
+    ...(options.headers || {}),
+    'x-csrf-token': csrfToken,
+  };
+
+  if (typeof options.body === 'string' && !('Content-Type' in headers) && !('content-type' in headers)) {
+    headers['Content-Type'] = 'application/json';
+  }
+
   const response = await fetch(url, {
     ...options,
-    headers: {
-      ...(options.headers || {}),
-      'x-csrf-token': csrfToken,
-      ...(options.body ? { 'Content-Type': 'application/json' } : {}),
-    },
+    headers,
   });
 
   const data = await response.json();
@@ -96,13 +106,13 @@ function renderServerSelector() {
       </div>
       <div class="selector-row">
         <select id="guild-select-input" class="guild-select-input" aria-label="Sélection du serveur Discord">
-          ${state.guilds.map((guild) => `<option value="${esc(guild.id)}" ${guild.id === state.selectedGuildId ? 'selected' : ''}>${esc(guild.name)}</option>`).join('')}
+          ${state.guilds.map((guild) => `<option value="${escapeHtml(guild.id)}" ${guild.id === state.selectedGuildId ? 'selected' : ''}>${escapeHtml(guild.name)}</option>`).join('')}
         </select>
         <div class="selector-preview">
-          ${guildIconUrl(selectedGuild()) ? `<img class="guild-icon" src="${esc(guildIconUrl(selectedGuild()))}" alt="Icône serveur" />` : '<div class="guild-icon guild-icon-placeholder">#</div>'}
+          ${guildIconUrl(selectedGuild()) ? `<img class="guild-icon" src="${escapeHtml(guildIconUrl(selectedGuild()))}" alt="Icône serveur" />` : '<div class="guild-icon guild-icon-placeholder">#</div>'}
           <div>
-            <p class="selector-title">${esc(selectedGuild()?.name || '')}</p>
-            <p class="muted">${esc(selectedGuild()?.id || '')}</p>
+            <p class="selector-title">${escapeHtml(selectedGuild()?.name || '')}</p>
+            <p class="muted">${escapeHtml(selectedGuild()?.id || '')}</p>
           </div>
         </div>
       </div>
@@ -148,13 +158,13 @@ function renderGuildCards() {
       ${state.guilds.map((guild) => `
         <article class="card guild-card ${state.selectedGuildId === guild.id ? 'selected' : ''}">
           <div class="guild-card-head">
-            ${guildIconUrl(guild) ? `<img class="guild-icon" src="${esc(guildIconUrl(guild))}" alt="Icône ${esc(guild.name)}" />` : '<div class="guild-icon guild-icon-placeholder">#</div>'}
+            ${guildIconUrl(guild) ? `<img class="guild-icon" src="${escapeHtml(guildIconUrl(guild))}" alt="Icône ${escapeHtml(guild.name)}" />` : '<div class="guild-icon guild-icon-placeholder">#</div>'}
             <div>
-              <h3>${esc(guild.name)}</h3>
-              <p class="muted">${esc(guild.id)}</p>
+              <h3>${escapeHtml(guild.name)}</h3>
+              <p class="muted">${escapeHtml(guild.id)}</p>
             </div>
           </div>
-          <button class="btn btn-secondary" data-select-guild="${esc(guild.id)}">Sélectionner</button>
+          <button class="btn btn-secondary" data-select-guild="${escapeHtml(guild.id)}">Sélectionner</button>
         </article>
       `).join('')}
     </div>
@@ -215,11 +225,11 @@ async function loadHome() {
       <article class="card home-profile-card">
         <h2>Vue d’ensemble</h2>
         <div class="profile-row">
-          ${state.me.user.avatarUrl ? `<img class="avatar" src="${esc(state.me.user.avatarUrl)}" alt="Avatar utilisateur" />` : '<div class="avatar avatar-placeholder">U</div>'}
+          ${state.me.user.avatarUrl ? `<img class="avatar" src="${escapeHtml(state.me.user.avatarUrl)}" alt="Avatar utilisateur" />` : '<div class="avatar avatar-placeholder">U</div>'}
           <div>
-            <p><strong>${esc(state.me.user.username)}</strong></p>
-            <p class="muted">Provider: ${esc(state.me.user.provider || 'local')}</p>
-            <p class="muted">Serveur sélectionné: ${esc(data.guild.name)}</p>
+            <p><strong>${escapeHtml(state.me.user.username)}</strong></p>
+            <p class="muted">Provider: ${escapeHtml(state.me.user.provider || 'local')}</p>
+            <p class="muted">Serveur sélectionné: ${escapeHtml(data.guild.name)}</p>
           </div>
         </div>
         ${renderQuickLinks()}
@@ -227,8 +237,8 @@ async function loadHome() {
 
       <article class="card">
         <h2>État du bot</h2>
-        <p class="status-pill status-${esc(data.bot.status || 'unknown')}">${esc(botStatusLabel(data.bot.status))}</p>
-        <p class="muted">Dernière synchronisation: ${esc(fmtDate(data.bot.lastSyncedAt))}</p>
+        <p class="status-pill status-${escapeHtml(data.bot.status || 'unknown')}">${escapeHtml(botStatusLabel(data.bot.status))}</p>
+        <p class="muted">Dernière synchronisation: ${escapeHtml(fmtDate(data.bot.lastSyncedAt))}</p>
         <div class="metrics-grid compact">
           <div><p class="metric-label">Modules actifs</p><p class="metric-value">${enabledModules}/${data.metrics.modulesTotal}</p></div>
           <div><p class="metric-label">Utilisateurs sync</p><p class="metric-value">${data.bot.syncedUsers}</p></div>
@@ -239,10 +249,10 @@ async function loadHome() {
       <article class="card">
         <h2>Configuration clé</h2>
         <ul class="summary-list">
-          <li><span>Préfixe</span><strong>${esc(data.settings?.prefix || '/')}</strong></li>
-          <li><span>Langue</span><strong>${esc((data.settings?.language || 'fr').toUpperCase())}</strong></li>
+          <li><span>Préfixe</span><strong>${escapeHtml(data.settings?.prefix || '/')}</strong></li>
+          <li><span>Langue</span><strong>${escapeHtml((data.settings?.language || 'fr').toUpperCase())}</strong></li>
           <li><span>Welcome</span><strong>${data.settings?.welcome_enabled ? 'Activé' : 'Désactivé'}</strong></li>
-          <li><span>Channel logs</span><strong>${esc(data.settings?.log_channel_id || 'Non défini')}</strong></li>
+          <li><span>Channel logs</span><strong>${escapeHtml(data.settings?.log_channel_id || 'Non défini')}</strong></li>
         </ul>
       </article>
 
@@ -250,7 +260,7 @@ async function loadHome() {
         <h2>Modules</h2>
         <p class="muted">${enabledModules} actif(s) • ${disabledModules} inactif(s)</p>
         <div class="module-chip-row">
-          ${topModules.map((module) => `<span class="module-chip ${module.enabled ? 'module-chip-on' : 'module-chip-off'}">${esc(module.name)}</span>`).join('')}
+          ${topModules.map((module) => `<span class="module-chip ${module.enabled ? 'module-chip-on' : 'module-chip-off'}">${escapeHtml(module.name)}</span>`).join('')}
         </div>
       </article>
 
@@ -260,8 +270,8 @@ async function loadHome() {
           <ul class="activity-list">
             ${data.activity.map((entry) => `
               <li>
-                <p><strong>${esc(entry.actor)}</strong> · ${esc(entry.action)}</p>
-                <p class="muted">${esc(entry.targetType)} · ${esc(entry.targetId)} · ${esc(fmtDate(entry.createdAt))}</p>
+                <p><strong>${escapeHtml(entry.actor)}</strong> · ${escapeHtml(entry.action)}</p>
+                <p class="muted">${escapeHtml(entry.targetType)} · ${escapeHtml(entry.targetId)} · ${escapeHtml(fmtDate(entry.createdAt))}</p>
               </li>
             `).join('')}
           </ul>
@@ -286,9 +296,9 @@ async function loadOverview() {
       <article class="card"><h3>Utilisateurs</h3><p>${data.metrics.usersTotal}</p></article>
     </div>
     <div class="card">
-      <h3>${esc(data.guild.name)}</h3>
-      <p class="muted">ID: ${esc(data.guild.id)}</p>
-      <p>Préfixe: <code>${esc(data.settings?.prefix || '/')}</code> • Langue: <code>${esc(data.settings?.language || 'fr')}</code></p>
+      <h3>${escapeHtml(data.guild.name)}</h3>
+      <p class="muted">ID: ${escapeHtml(data.guild.id)}</p>
+      <p>Préfixe: <code>${escapeHtml(data.settings?.prefix || '/')}</code> • Langue: <code>${escapeHtml(data.settings?.language || 'fr')}</code></p>
     </div>
   `;
 }
@@ -303,10 +313,10 @@ async function loadModules() {
     <div class="module-grid">
       ${data.modules.map((module) => `
         <article class="card module-card">
-          <h3>${esc(module.name)}</h3>
-          <p class="muted">${esc(module.description)}</p>
+          <h3>${escapeHtml(module.name)}</h3>
+          <p class="muted">${escapeHtml(module.description)}</p>
           <label class="switch-row">
-            <input type="checkbox" data-module-toggle="${esc(module.key)}" ${module.enabled ? 'checked' : ''} />
+            <input type="checkbox" data-module-toggle="${escapeHtml(module.key)}" ${module.enabled ? 'checked' : ''} />
             <span>${module.enabled ? 'Actif' : 'Inactif'}</span>
           </label>
         </article>
@@ -343,11 +353,11 @@ async function loadUsers() {
       <tbody>
       ${data.users.map((user) => `
         <tr>
-          <td>${esc(user.id)}</td>
-          <td>${esc(user.username)}</td>
-          <td>${esc(user.displayName || '-')}</td>
+          <td>${escapeHtml(user.id)}</td>
+          <td>${escapeHtml(user.username)}</td>
+          <td>${escapeHtml(user.displayName || '-')}</td>
           <td>${user.isAdmin ? 'Oui' : 'Non'}</td>
-          <td>${esc(user.roles.join(', ') || '-')}</td>
+          <td>${escapeHtml(user.roles.join(', ') || '-')}</td>
         </tr>
       `).join('')}
       </tbody>
@@ -387,11 +397,11 @@ async function loadRoles() {
         const p = permsByRole.get(role.id) || {};
         return `
           <tr>
-            <td>${esc(role.name)}</td>
-            <td><input type="checkbox" data-role="${esc(role.id)}" data-flag="canManageSettings" ${p.canManageSettings ? 'checked' : ''} /></td>
-            <td><input type="checkbox" data-role="${esc(role.id)}" data-flag="canManageModules" ${p.canManageModules ? 'checked' : ''} /></td>
-            <td><input type="checkbox" data-role="${esc(role.id)}" data-flag="canManageUsers" ${p.canManageUsers ? 'checked' : ''} /></td>
-            <td><button class="btn btn-secondary" data-save-role="${esc(role.id)}">Enregistrer</button></td>
+            <td>${escapeHtml(role.name)}</td>
+            <td><input type="checkbox" data-role="${escapeHtml(role.id)}" data-flag="canManageSettings" ${p.canManageSettings ? 'checked' : ''} /></td>
+            <td><input type="checkbox" data-role="${escapeHtml(role.id)}" data-flag="canManageModules" ${p.canManageModules ? 'checked' : ''} /></td>
+            <td><input type="checkbox" data-role="${escapeHtml(role.id)}" data-flag="canManageUsers" ${p.canManageUsers ? 'checked' : ''} /></td>
+            <td><button class="btn btn-secondary" data-save-role="${escapeHtml(role.id)}">Enregistrer</button></td>
           </tr>
         `;
       }).join('')}
@@ -430,7 +440,7 @@ async function loadSettings() {
   appView.innerHTML = `
     <h2>Paramètres du bot</h2>
     <form id="settings-form" class="form-grid card">
-      <label><span>Préfixe</span><input name="prefix" maxlength="5" value="${esc(data.settings.prefix || '/')}" /></label>
+      <label><span>Préfixe</span><input name="prefix" maxlength="5" value="${escapeHtml(data.settings.prefix || '/')}" /></label>
       <label>
         <span>Langue</span>
         <select name="language">
@@ -440,9 +450,9 @@ async function loadSettings() {
       </label>
       <label>
         <span>Message de bienvenue</span>
-        <textarea name="welcome_message" maxlength="300">${esc(data.settings.welcome_message || '')}</textarea>
+        <textarea name="welcome_message" maxlength="300">${escapeHtml(data.settings.welcome_message || '')}</textarea>
       </label>
-      <label><span>Salon log (ID)</span><input name="log_channel_id" value="${esc(data.settings.log_channel_id || '')}" /></label>
+      <label><span>Salon log (ID)</span><input name="log_channel_id" value="${escapeHtml(data.settings.log_channel_id || '')}" /></label>
       <label class="switch-row">
         <input type="checkbox" name="welcome_enabled" ${data.settings.welcome_enabled ? 'checked' : ''} />
         <span>Activer les messages de bienvenue</span>
@@ -512,7 +522,7 @@ async function loadView(view) {
     if (view === 'settings') await loadSettings();
   } catch (error) {
     notify(error.message, 'error');
-    appView.innerHTML = `<p class="error">${esc(error.message)}</p>`;
+    appView.innerHTML = `<p class="error">${escapeHtml(error.message)}</p>`;
   }
 }
 
@@ -525,6 +535,11 @@ document.querySelectorAll('[data-view]').forEach((button) => {
 syncBtn?.addEventListener('click', syncGuild);
 
 logoutBtn?.addEventListener('click', async () => {
+  if (!csrfToken || typeof csrfToken !== 'string') {
+    window.location.href = '/login';
+    return;
+  }
+
   await fetch('/api/auth/logout', {
     method: 'POST',
     headers: { 'x-csrf-token': csrfToken },
@@ -540,7 +555,7 @@ async function bootstrap() {
     await loadView('home');
   } catch (error) {
     console.error('Dashboard bootstrap failed:', error);
-    notify('Session invalide ou expirée (déconnexion distante possible). Reconnectez-vous.', 'error');
+    notify('Session invalide ou expirée, vous avez peut-être été déconnecté. Reconnectez-vous.', 'error');
     window.location.href = '/login';
   }
 }
